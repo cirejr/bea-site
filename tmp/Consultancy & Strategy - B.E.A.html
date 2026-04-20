@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+
+<html class="scroll-smooth" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>B.E.A. Strategic Advisory | Excellence in African Business</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&amp;family=Noto+Serif:ital,wght@0,400;0,700;1,400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-tertiary": "#ffffff",
+                    "surface-container-lowest": "#ffffff",
+                    "on-secondary-fixed": "#1b1c1b",
+                    "surface-container": "#e8eff7",
+                    "surface-container-high": "#e2e9f1",
+                    "secondary-fixed": "#e3e2e0",
+                    "on-primary": "#ffffff",
+                    "on-tertiary-fixed-variant": "#1f477b",
+                    "on-secondary-fixed-variant": "#464746",
+                    "surface-container-highest": "#dce3eb",
+                    "on-secondary-container": "#626361",
+                    "on-tertiary-container": "#fefcff",
+                    "inverse-primary": "#adc6ff",
+                    "surface-variant": "#dce3eb",
+                    "error-container": "#ffdad6",
+                    "primary-fixed-dim": "#adc6ff",
+                    "secondary-fixed-dim": "#c7c6c4",
+                    "secondary-container": "#e0dfdd",
+                    "on-primary-fixed-variant": "#004493",
+                    "tertiary": "#385d92",
+                    "surface-tint": "#005bc1",
+                    "inverse-surface": "#2a3137",
+                    "primary-container": "#0070eb",
+                    "error": "#ba1a1a",
+                    "on-error-container": "#93000a",
+                    "on-surface-variant": "#414755",
+                    "primary": "#0058bc",
+                    "tertiary-fixed-dim": "#a7c8ff",
+                    "inverse-on-surface": "#eaf1f9",
+                    "surface": "#f6faff",
+                    "on-primary-container": "#fefcff",
+                    "tertiary-container": "#5275ac",
+                    "on-secondary": "#ffffff",
+                    "tertiary-fixed": "#d5e3ff",
+                    "background": "#f6faff",
+                    "outline": "#717786",
+                    "surface-bright": "#f6faff",
+                    "on-primary-fixed": "#001a41",
+                    "outline-variant": "#c1c6d7",
+                    "surface-container-low": "#edf4fc",
+                    "surface-dim": "#d4dbe3",
+                    "primary-fixed": "#d8e2ff",
+                    "on-background": "#151c22",
+                    "secondary": "#5e5e5d",
+                    "on-tertiary-fixed": "#001b3c",
+                    "on-surface": "#151c22",
+                    "on-error": "#ffffff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "1rem",
+                    "lg": "2rem",
+                    "xl": "3rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Inter"],
+                    "body": ["Noto Serif"],
+                    "label": ["Inter"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .bea-watermark {
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 10 L50 30 L30 50 L35 30 Z' fill='%23003366' fill-opacity='0.05'/%3E%3C/svg%3E");
+        }
+        .glass-panel {
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body selection:bg-primary-fixed selection:text-on-primary-fixed overflow-x-hidden">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 bg-[#f6faff]/80 backdrop-blur-xl flex justify-between items-center px-8 py-4 max-w-full">
+<div class="flex items-center gap-8">
+<span class="text-2xl font-black text-[#007AFF] tracking-tighter">B.E.A.</span>
+<div class="hidden md:flex items-center space-y-0 space-x-8 font-['Inter'] font-semibold tracking-tight">
+<a class="text-[#007AFF] border-b-2 border-[#007AFF] pb-1 hover:text-[#0058bc] transition-colors duration-300" href="#">Expertise</a>
+<a class="text-[#5e5e5d] hover:text-[#0058bc] transition-colors duration-300" href="#">Services</a>
+<a class="text-[#5e5e5d] hover:text-[#0058bc] transition-colors duration-300" href="#">Insights</a>
+<a class="text-[#5e5e5d] hover:text-[#0058bc] transition-colors duration-300" href="#">About</a>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<button class="bg-primary text-on-primary px-6 py-2.5 rounded font-headline font-bold hover:scale-95 transition-all duration-200">Consult Now</button>
+<div class="w-10 h-10 rounded-full overflow-hidden bg-surface-container-high ring-2 ring-primary/20">
+<img alt="Advisor Profile" class="w-full h-full object-cover" data-alt="Close-up portrait of a professional African male consultant in a sharp suit, neutral background, soft professional lighting, studio quality." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA24ZLUdi7pdjdjKkoHtQogkaIjU7mOJLaN2uereM2WtC7D3HzyvqHOoGUO77pgCYpTChhHu2qfvoclv-ZkyoXdlyEHbkYzerA8bICjwe3pJsmk433e-kjUhpNff1awZ-UUHpbOvgfrjEfpRa3iGY-DSa7LZJuXJfNaxeyGNE0x96x2wsP8Ytl7HyIRLmj8HQIgrqryvoS50IStLSk7VgodylVgRU8xcgPPEaaN6NOr0HhRQHs6CMv3eiIBUhVp7H3aUXb3umHXUQ"/>
+</div>
+</div>
+</nav>
+<main class="pt-20">
+<!-- Hero Section -->
+<section class="relative min-h-[921px] flex items-center px-8 md:px-24 overflow-hidden">
+<div class="absolute inset-0 z-0">
+<img alt="Architectural precision" class="w-full h-full object-cover" data-alt="Wide angle view of modern glass and steel skyscraper architecture against a clear blue sky, geometric lines, high-end commercial aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBROmA9--kMPys5U7HZQfAmMNlyOS7vmhkAwxnaPhpE2vFloOwlVMCUvZb9lABijwy8PeJpYvfPdZivSWk56-XNwxkxebb1qyQet2NDzxP7ZLsU8FgVD_mm4FunUXqGFNmrCunO2x4zxUKI_1gmqYyGKhmsPWo4w5cPxGckHZfI-HUIL4gY6gN8G8he_SXvl-HM2EBh7iHrrv1n-sZUl3-lbdgR09pCnr7zRWK85tJZAwSg_Vjc6zc8K6K2ulib7joBtUb00_qlUA"/>
+<div class="absolute inset-0 bg-gradient-to-r from-surface via-surface/90 to-surface/40"></div>
+</div>
+<div class="relative z-10 max-w-3xl">
+<span class="inline-block px-4 py-1.5 bg-secondary-container text-on-secondary-container font-headline text-xs font-bold tracking-widest uppercase rounded-full mb-6">
+                    Bosse Elanpro Afrique
+                </span>
+<h1 class="text-6xl md:text-8xl font-headline font-black text-primary leading-[0.9] tracking-tighter mb-8">
+                    Strategic Excellence <br/>in African Business
+                </h1>
+<p class="text-xl md:text-2xl font-body text-on-surface-variant max-w-xl leading-relaxed mb-10">
+                    Tailored consultancy services designed for sustainable growth, combining academic rigor with architectural precision.
+                </p>
+<div class="flex flex-wrap gap-4">
+<button class="px-8 py-4 bg-primary text-on-primary font-headline font-bold rounded-lg shadow-lg hover:bg-primary-container transition-colors">
+                        Request a Consultation
+                    </button>
+<button class="px-8 py-4 bg-surface-container-highest text-primary font-headline font-bold rounded-lg hover:bg-surface-container-high transition-colors flex items-center gap-2">
+                        View Service Pillars
+                        <span class="material-symbols-outlined" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Architectural Detail -->
+<div class="absolute right-[-10%] top-1/2 -translate-y-1/2 hidden xl:block opacity-20">
+<img alt="Corporate Interior" class="w-[800px] grayscale" data-alt="Blueprint schematic overlaid on a blurred image of a modern glass office interior, architectural lines and technical drawings." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA5aya3_LUgpErXH3i9WqGuZ4hOq16-SFMsmMk4MyhrYbW1Bx1RhSERkZtb0LtIX6HPyrTeI7V2m2cm-AKJ36WmpXTjgWTfxkxq_e3DDBBLIRoE-eHCd2sEBpMlLJfvnt_2xV29PnkrGbA7nvhpa0_bBS9AhGP6JFp9EsOu8df3xjGTbkTlLzBCRMUgKyGdLFVUseZiiQWgiALshmi_Be7IJIC04Hy-dCxMSff1Qs8wJZObnxnWT2oVKeFpCswRPNXGvX_3o3vPIQ"/>
+</div>
+</section>
+<!-- Service Pillars - HR Strategy -->
+<section class="py-32 px-8 md:px-24 bg-surface-container-lowest bea-watermark relative" id="hr-strategy">
+<div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+<div class="order-2 lg:order-1">
+<div class="aspect-[4/3] rounded-xl overflow-hidden shadow-2xl relative group">
+<img alt="HR Strategy" class="w-full h-full object-cover" data-alt="Professional diverse team in a high-end conference room, whiteboards with strategic diagrams, collaborative atmosphere, soft morning light." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC1mAdz8toLOjx1DTWMs8h2z8u0IoCTr9FT7nXWJtPhuCOzoq-iQC0pNdQaFb_j8FGrpKmx-KtNn4BikdAX2hwN0zsHqNfly9I0yuvInly9NBFTU1eoUXIxQ__eQXWGabGCz5UpoIQf4zU4qSQ7OdTGXfYwPfb1E9eL6_kqj9jeQFHTkTesbapKrojvPgkLBV8bnXzAN0lVGopr_j1XXUq2DhcWTEzqg56jd3WCem6GTt9UB26HXlMntfcxLmDA5WC2Hg0zu-MrfA"/>
+<div class="absolute inset-0 bg-primary/10 group-hover:bg-transparent transition-colors duration-500"></div>
+</div>
+</div>
+<div class="order-1 lg:order-2">
+<div class="flex items-center gap-4 mb-6">
+<div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined" data-icon="groups">groups</span>
+</div>
+<h2 class="text-sm font-headline font-bold text-secondary uppercase tracking-[0.2em]">Pillar I</h2>
+</div>
+<h3 class="text-4xl md:text-5xl font-headline font-black text-primary mb-8 tracking-tight">HR Strategy</h3>
+<p class="text-xl font-body text-on-surface mb-8 italic">
+                        "Optimization of human capital through bespoke performance systems."
+                    </p>
+<div class="space-y-6">
+<p class="text-on-surface-variant leading-relaxed">
+                            In the rapidly evolving African business landscape, human capital is the primary differentiator. We architect organizational structures that foster talent retention, peak performance, and cultural alignment.
+                        </p>
+<ul class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<li class="flex items-center gap-3 text-sm font-headline font-semibold text-on-surface">
+<span class="material-symbols-outlined text-primary text-lg" data-icon="check_circle">check_circle</span>
+                                Performance Systems
+                            </li>
+<li class="flex items-center gap-3 text-sm font-headline font-semibold text-on-surface">
+<span class="material-symbols-outlined text-primary text-lg" data-icon="check_circle">check_circle</span>
+                                Talent Acquisition
+                            </li>
+<li class="flex items-center gap-3 text-sm font-headline font-semibold text-on-surface">
+<span class="material-symbols-outlined text-primary text-lg" data-icon="check_circle">check_circle</span>
+                                Succession Planning
+                            </li>
+<li class="flex items-center gap-3 text-sm font-headline font-semibold text-on-surface">
+<span class="material-symbols-outlined text-primary text-lg" data-icon="check_circle">check_circle</span>
+                                Policy Governance
+                            </li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<!-- Service Pillars - Financial Audits -->
+<section class="py-32 px-8 md:px-24 bg-surface-container-low relative overflow-hidden" id="financial-audits">
+<div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+<div class="relative z-10">
+<div class="flex items-center gap-4 mb-6">
+<div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined" data-icon="account_balance">account_balance</span>
+</div>
+<h2 class="text-sm font-headline font-bold text-secondary uppercase tracking-[0.2em]">Pillar II</h2>
+</div>
+<h3 class="text-4xl md:text-5xl font-headline font-black text-primary mb-8 tracking-tight">Financial Audits</h3>
+<p class="text-xl font-body text-on-surface mb-8 italic">
+                        "Rigorous oversight and internal controls with a focus on SYSCOHADA compliance."
+                    </p>
+<div class="space-y-6">
+<p class="text-on-surface-variant leading-relaxed">
+                            Financial integrity is the foundation of institutional trust. Our audit practice combines technical precision with deep regional insight to ensure your organization meets global standards within local regulatory frameworks.
+                        </p>
+<div class="p-8 bg-surface-container-lowest rounded-xl shadow-sm">
+<div class="flex items-start gap-4">
+<span class="material-symbols-outlined text-primary" data-icon="verified">verified</span>
+<div>
+<h4 class="font-headline font-bold text-on-surface mb-2">SYSCOHADA Compliance</h4>
+<p class="text-sm text-on-surface-variant">Expert alignment with the Organization for the Harmonization of Business Law in Africa standards.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="relative">
+<div class="aspect-square rounded-full overflow-hidden border-[16px] border-surface-container-highest">
+<img alt="Financial Precision" class="w-full h-full object-cover" data-alt="Hands of a professional auditor reviewing financial documents and using a calculator, laptop screen with charts, elegant office setting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD5bA25PZgbRQZ1MmACas_yc_5D8I2ONsIX2ofUkIrXfKVk8XIcFVV2Sesk-LRkftnof0pWiKEKAg7jhm6Wq8VvQgILd6U8Zm2qq_xoKFc1LlUnkU939vXcYLrks7SMV1Ee5sbQoM3SGEgSg9PrzWfFPQzMqxC0LEIc1SiO0xcHE86Rrw9GWvi_qdhoq_DmXnRBodVeojI-uo7VG1IRT3NtPAHQhf_VvNij0KpyGScOmSxIUztjI4euxk3onpc7mmSbzMfq4GNknQ"/>
+</div>
+</div>
+</div>
+</section>
+<!-- Service Pillars - Organizational Transformation -->
+<section class="py-32 px-8 md:px-24 bg-surface-container-high relative" id="transformation">
+<div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+<div class="order-2 lg:order-1">
+<div class="grid grid-cols-2 gap-4">
+<div class="aspect-[3/4] rounded-xl overflow-hidden mt-12">
+<img alt="Transformation 1" class="w-full h-full object-cover" data-alt="Modern office corridor with glass walls and reflective floors, clean lines, minimalist architectural perspective." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA96ie_es46k2r5K-sWuh2poRpgstf8JXoUlByqcfrhyz__e1I-A7Z3skHI2aL_5e4ZgIq4zqWgJ90xaYdW9DjRpMHQTtLdTwiQOzRcCqaClx7LtsHuj6P-HPnUjbHQ4g5vDb62Ub6MDKmQQPh0kGtzRWGPXm0QmWp-6iHY_xZgi22WpgP-Z9HiFzCq7QQLCd3ZDxClp2cGX_B1E-F2pKUcYISxcrYBT9It-hlCpSLISVFagB6R6Tsq8aitYJzqpz1xtYnBYL8SNg"/>
+</div>
+<div class="aspect-[3/4] rounded-xl overflow-hidden">
+<img alt="Transformation 2" class="w-full h-full object-cover" data-alt="Abstract architectural shot showing the corner of a contemporary building against a bright sky, blue tinted glass panels." src="https://lh3.googleusercontent.com/aida-public/AB6AXuApRDdZSQgRDeC5UdTCSLzUikuatIN3zVM-aucKTktYC-8bIfMrsppMCLPqiXIMlGsVO0Ll-Zrpppll-pGmUKtmJnOhSQGGibQfaZuGfBy055Yo2vwC3N8W88xk3stpV539JhwT8xmuaqKY4xdmfKKQ6LNbELUmjrHvCYWG4u1I-8vC5qOPo_65qKmezkZvn6RwtTbnh9H7gAqrHeIedpqwPx6STZNNnHOKO3HCVsH9GKLmNyhpTJWxjdkzPq5V5-A-SwRAKugFqw"/>
+</div>
+</div>
+</div>
+<div class="order-1 lg:order-2">
+<div class="flex items-center gap-4 mb-6">
+<div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined" data-icon="account_tree">account_tree</span>
+</div>
+<h2 class="text-sm font-headline font-bold text-secondary uppercase tracking-[0.2em]">Pillar III</h2>
+</div>
+<h3 class="text-4xl md:text-5xl font-headline font-black text-primary mb-8 tracking-tight">Transformation</h3>
+<p class="text-xl font-body text-on-surface mb-8 italic">
+                        "Guiding institutions through systemic change to ensure long-term vitality."
+                    </p>
+<p class="text-on-surface-variant leading-relaxed mb-8">
+                        We don't just advise; we re-engineer. Our transformation programs are blueprints for institutional evolution, ensuring that legacy organizations can compete in the digital age.
+                    </p>
+<button class="flex items-center gap-3 text-primary font-headline font-black uppercase tracking-widest text-xs group">
+                        Explore Methodology
+                        <span class="w-12 h-[2px] bg-primary group-hover:w-16 transition-all duration-300"></span>
+</button>
+</div>
+</div>
+</section>
+<!-- Leadership Mentoring Section -->
+<section class="py-32 px-8 md:px-24 bg-surface-container relative">
+<div class="max-w-5xl mx-auto text-center mb-20">
+<h2 class="text-sm font-headline font-bold text-primary uppercase tracking-[0.4em] mb-4">Leadership Mentoring</h2>
+<h3 class="text-5xl md:text-7xl font-headline font-black text-on-surface tracking-tighter mb-8">Architecting the Leaders of Tomorrow</h3>
+<p class="text-xl font-body text-on-surface-variant max-w-2xl mx-auto italic">
+                    Beyond strategy lies the individual. Our mentoring tracks provide the academic depth and practical wisdom needed to navigate complex institutional landscapes.
+                </p>
+</div>
+<div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12">
+<!-- Track 1 -->
+<div class="group bg-surface-container-lowest p-12 rounded-xl transition-all duration-500 hover:shadow-2xl relative overflow-hidden">
+<div class="absolute top-0 right-0 w-32 h-32 opacity-5 translate-x-10 -translate-y-10 group-hover:translate-x-0 group-hover:translate-y-0 transition-transform duration-700">
+<span class="material-symbols-outlined text-[120px] text-primary" data-icon="school">school</span>
+</div>
+<h4 class="text-2xl font-headline font-black text-primary mb-6">Academic Excellence Track</h4>
+<p class="text-on-surface-variant font-body mb-8 leading-relaxed">
+                        Focused on intellectual rigor, this track prepares future executives with the theoretical foundations and historical contexts of global management.
+                    </p>
+<ul class="space-y-4 mb-10">
+<li class="flex items-center gap-3 text-sm text-on-surface font-headline font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+                            Institutional Ethics &amp; Governance
+                        </li>
+<li class="flex items-center gap-3 text-sm text-on-surface font-headline font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+                            Strategic Macro-economics
+                        </li>
+</ul>
+<a class="inline-flex items-center gap-2 text-primary font-headline font-bold hover:gap-4 transition-all" href="#">
+                        Enroll in track
+                        <span class="material-symbols-outlined" data-icon="chevron_right">chevron_right</span>
+</a>
+</div>
+<!-- Track 2 -->
+<div class="group bg-primary p-12 rounded-xl transition-all duration-500 hover:shadow-2xl relative overflow-hidden">
+<div class="absolute top-0 right-0 w-32 h-32 opacity-10 translate-x-10 -translate-y-10 group-hover:translate-x-0 group-hover:translate-y-0 transition-transform duration-700">
+<span class="material-symbols-outlined text-[120px] text-white" data-icon="architecture">architecture</span>
+</div>
+<h4 class="text-2xl font-headline font-black text-on-primary mb-6">The Architectural Architect Track</h4>
+<p class="text-on-primary/80 font-body mb-8 leading-relaxed">
+                        For leaders who need to build. This intensive track focuses on systemic thinking, organizational structural design, and precision execution.
+                    </p>
+<ul class="space-y-4 mb-10">
+<li class="flex items-center gap-3 text-sm text-on-primary font-headline font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-white"></span>
+                            Systemic Change Management
+                        </li>
+<li class="flex items-center gap-3 text-sm text-on-primary font-headline font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-white"></span>
+                            Architectural Precision in Ops
+                        </li>
+</ul>
+<a class="inline-flex items-center gap-2 text-on-primary font-headline font-bold hover:gap-4 transition-all" href="#">
+                        Apply for mentorship
+                        <span class="material-symbols-outlined" data-icon="chevron_right">chevron_right</span>
+</a>
+</div>
+</div>
+</section>
+<!-- CTA Section -->
+<section class="py-24 px-8 md:px-24 bg-surface-container-lowest">
+<div class="max-w-7xl mx-auto rounded-lg bg-gradient-to-br from-primary to-primary-container p-16 relative overflow-hidden">
+<div class="absolute inset-0 bea-watermark opacity-10"></div>
+<div class="relative z-10 flex flex-col md:flex-row items-center justify-between gap-12">
+<div class="max-w-xl text-center md:text-left">
+<h2 class="text-4xl md:text-5xl font-headline font-black text-on-primary tracking-tighter mb-6">Begin Your Institutional Transformation</h2>
+<p class="text-on-primary/90 font-body text-lg">Speak with a lead advisor to architect a bespoke strategy for your organization.</p>
+</div>
+<button class="whitespace-nowrap px-10 py-5 bg-white text-primary font-headline font-black rounded-lg hover:bg-surface-container transition-all shadow-xl">
+                        Schedule Audit
+                    </button>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-[#003366] text-[#E5E4E2] font-['Noto_Serif'] text-sm w-full py-12 flex flex-col items-center justify-center space-y-6 px-12">
+<div class="flex flex-col md:flex-row items-center gap-12 mb-8">
+<span class="text-[#007AFF] font-bold text-2xl tracking-tighter">B.E.A.</span>
+<div class="flex flex-wrap justify-center gap-8 text-[#E5E4E2]/70">
+<a class="hover:text-white transition-opacity" href="#">Privacy Policy</a>
+<a class="hover:text-white transition-opacity" href="#">Terms of Service</a>
+<a class="hover:text-white transition-opacity" href="#">Institutional Ethics</a>
+<a class="hover:text-white transition-opacity" href="#">Global Offices</a>
+</div>
+</div>
+<p class="text-center">© 2024 B.E.A. Strategic Advisory. All rights reserved.</p>
+<div class="flex gap-6 mt-4">
+<span class="material-symbols-outlined text-xl hover:text-white transition-colors cursor-pointer" data-icon="public">public</span>
+<span class="material-symbols-outlined text-xl hover:text-white transition-colors cursor-pointer" data-icon="mail">mail</span>
+<span class="material-symbols-outlined text-xl hover:text-white transition-colors cursor-pointer" data-icon="apartment">apartment</span>
+</div>
+</footer>
+</body></html>

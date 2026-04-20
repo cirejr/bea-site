@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+
+<html class="scroll-smooth" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Contact - B.E.A (Academic Architect)</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&amp;family=Noto+Serif:ital,wght@0,400;0,700;1,400&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container-low": "#edf4fc",
+                    "inverse-on-surface": "#eaf1f9",
+                    "surface": "#f6faff",
+                    "secondary-fixed-dim": "#c7c6c4",
+                    "on-secondary-fixed": "#1b1c1b",
+                    "on-background": "#151c22",
+                    "error-container": "#ffdad6",
+                    "on-error": "#ffffff",
+                    "on-secondary-container": "#626361",
+                    "on-secondary": "#ffffff",
+                    "tertiary-container": "#5275ac",
+                    "on-primary-fixed": "#001a41",
+                    "secondary": "#5e5e5d",
+                    "primary-fixed": "#d8e2ff",
+                    "primary": "#0058bc",
+                    "surface-tint": "#005bc1",
+                    "inverse-surface": "#2a3137",
+                    "on-tertiary-container": "#fefcff",
+                    "on-surface": "#151c22",
+                    "on-tertiary": "#ffffff",
+                    "surface-container": "#e8eff7",
+                    "surface-bright": "#f6faff",
+                    "surface-container-lowest": "#ffffff",
+                    "tertiary-fixed": "#d5e3ff",
+                    "surface-dim": "#d4dbe3",
+                    "surface-container-highest": "#dce3eb",
+                    "on-primary-fixed-variant": "#004493",
+                    "primary-container": "#0070eb",
+                    "surface-container-high": "#e2e9f1",
+                    "outline-variant": "#c1c6d7",
+                    "on-tertiary-fixed-variant": "#1f477b",
+                    "on-surface-variant": "#414755",
+                    "on-primary-container": "#fefcff",
+                    "on-secondary-fixed-variant": "#464746",
+                    "background": "#f6faff",
+                    "on-error-container": "#93000a",
+                    "tertiary-fixed-dim": "#a7c8ff",
+                    "on-tertiary-fixed": "#001b3c",
+                    "surface-variant": "#dce3eb",
+                    "secondary-container": "#e0dfdd",
+                    "inverse-primary": "#adc6ff",
+                    "primary-fixed-dim": "#adc6ff",
+                    "secondary-fixed": "#e3e2e0",
+                    "outline": "#717786",
+                    "on-primary": "#ffffff",
+                    "tertiary": "#385d92",
+                    "error": "#ba1a1a"
+            },
+            "borderRadius": {
+                    "DEFAULT": "1rem",
+                    "lg": "2rem",
+                    "xl": "3rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Inter"],
+                    "body": ["Noto Serif"],
+                    "label": ["Inter"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+        }
+        .bea-arrow-watermark {
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 80L80 20M80 20H40M80 20V60' stroke='%230058bc' stroke-opacity='0.05' stroke-width='8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+            background-repeat: repeat;
+        }
+    </style>
+</head>
+<body class="bg-surface font-body text-on-surface antialiased">
+<!-- TopNavBar -->
+<header class="fixed top-0 w-full z-50 bg-white/80 dark:bg-slate-950/80 backdrop-blur-xl border-b border-blue-50/10 shadow-sm">
+<nav class="flex justify-between items-center px-8 py-4 max-w-7xl mx-auto">
+<div class="text-2xl font-black text-blue-600 dark:text-blue-400 uppercase tracking-tighter font-headline">Academic Architect</div>
+<div class="hidden md:flex items-center space-x-8 font-headline font-semibold tracking-tight text-sm">
+<a class="text-slate-600 dark:text-slate-400 hover:text-blue-500 transition-colors" href="#">Home</a>
+<a class="text-slate-600 dark:text-slate-400 hover:text-blue-500 transition-colors" href="#">Consultancy</a>
+<a class="text-slate-600 dark:text-slate-400 hover:text-blue-500 transition-colors" href="#">Training Catalog</a>
+<a class="text-slate-600 dark:text-slate-400 hover:text-blue-500 transition-colors" href="#">About</a>
+<a class="text-blue-600 dark:text-blue-400 border-b-2 border-blue-600 pb-1" href="#">Contact</a>
+</div>
+<button class="bg-primary text-on-primary px-6 py-2.5 rounded hover:bg-primary-container transition-all active:scale-95 duration-200 font-headline font-semibold text-sm">
+                Get Started
+            </button>
+</nav>
+</header>
+<main class="pt-24 min-h-screen bea-arrow-watermark">
+<!-- Hero Section -->
+<section class="relative px-8 py-20 max-w-7xl mx-auto overflow-hidden">
+<div class="grid lg:grid-cols-2 gap-16 items-center">
+<div class="space-y-6">
+<span class="font-headline font-bold text-primary tracking-widest uppercase text-xs">Reach Out</span>
+<h1 class="font-headline font-black text-primary text-5xl lg:text-7xl tracking-tighter leading-none">
+                        Get in <br/><span class="text-secondary-fixed-dim">Touch.</span>
+</h1>
+<p class="text-lg text-secondary leading-relaxed max-w-md">
+                        Institutional excellence begins with a conversation. Partner with BOSSE ELANPRO AFRIQUE for your consultancy and architectural training needs.
+                    </p>
+</div>
+<!-- Glassmorphic Hero Card -->
+<div class="glass-panel p-1 rounded-lg shadow-2xl relative overflow-hidden group">
+<img class="w-full aspect-[4/3] object-cover rounded-lg" data-alt="Modern high-end architectural building in Dakar with clean glass lines and blue sky reflecting in windows" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDhoPG_PeCLC4IMV94ICnz4Zcu5ifvN1LOzWsyak1awoROr3hPmfINwAwH470QO94EACUSYHLU-z83GR9HLyggw1TP3rNcwm88WBaWmqPSW9f4fiyEjVlwDJv-1KLRD8n0BeFF_PBg45_5ZXVRDs8X2QvaluulJXFIUpOWMrbfkv3dPludjjaLo0foQh9wl0sizCk3xLXaLp_vWzS1yMEaQXdKAkAxyb1ihHUZHt0-0YAlrGfQNvYhtwqXUTccmkqmk_68ER9qaOw"/>
+<div class="absolute inset-0 bg-gradient-to-tr from-primary/40 to-transparent flex items-end p-8">
+<div class="text-white">
+<p class="font-headline font-bold text-2xl">B.E.A.</p>
+<p class="font-body italic text-sm opacity-90">Architecting Intellectual Success</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Contact & Location Grid -->
+<section class="bg-surface-container-low px-8 py-24">
+<div class="max-w-7xl mx-auto grid lg:grid-cols-3 gap-12">
+<!-- Form Section (Bento Grid Style - Spans 2 cols) -->
+<div class="lg:col-span-2 space-y-12">
+<div class="bg-surface-container-lowest p-10 rounded-lg shadow-sm">
+<h2 class="font-headline font-bold text-3xl text-primary mb-8 tracking-tight">Institutional Inquiry</h2>
+<form class="grid md:grid-cols-2 gap-8">
+<div class="space-y-2">
+<label class="font-headline text-xs font-bold text-secondary uppercase tracking-wider">Full Name</label>
+<input class="w-full bg-surface-container-low border-none rounded-DEFAULT px-4 py-3 focus:ring-2 focus:ring-primary/30 transition-all text-on-surface font-headline placeholder:opacity-50" placeholder="Dr. John Doe" type="text"/>
+</div>
+<div class="space-y-2">
+<label class="font-headline text-xs font-bold text-secondary uppercase tracking-wider">Organization</label>
+<input class="w-full bg-surface-container-low border-none rounded-DEFAULT px-4 py-3 focus:ring-2 focus:ring-primary/30 transition-all text-on-surface font-headline placeholder:opacity-50" placeholder="Global Institute" type="text"/>
+</div>
+<div class="space-y-2">
+<label class="font-headline text-xs font-bold text-secondary uppercase tracking-wider">Email Address</label>
+<input class="w-full bg-surface-container-low border-none rounded-DEFAULT px-4 py-3 focus:ring-2 focus:ring-primary/30 transition-all text-on-surface font-headline placeholder:opacity-50" placeholder="contact@institution.org" type="email"/>
+</div>
+<div class="space-y-2">
+<label class="font-headline text-xs font-bold text-secondary uppercase tracking-wider">Service Interest</label>
+<select class="w-full bg-surface-container-low border-none rounded-DEFAULT px-4 py-3 focus:ring-2 focus:ring-primary/30 transition-all text-on-surface font-headline">
+<option>Consultancy</option>
+<option>Training</option>
+<option>Mentoring</option>
+</select>
+</div>
+<div class="md:col-span-2 space-y-2">
+<label class="font-headline text-xs font-bold text-secondary uppercase tracking-wider">Message</label>
+<textarea class="w-full bg-surface-container-low border-none rounded-DEFAULT px-4 py-3 focus:ring-2 focus:ring-primary/30 transition-all text-on-surface font-headline placeholder:opacity-50" placeholder="How can B.E.A support your vision?" rows="5"></textarea>
+</div>
+<div class="md:col-span-2 pt-4">
+<button class="w-full bg-primary text-white font-headline font-bold py-4 rounded-lg hover:shadow-lg hover:shadow-primary/20 transition-all flex items-center justify-center gap-2 group">
+                                    Submit Request
+                                    <span class="material-symbols-outlined text-lg group-hover:translate-x-1 transition-transform">send</span>
+</button>
+</div>
+</form>
+</div>
+</div>
+<!-- Office Location & Map -->
+<div class="space-y-12">
+<div class="bg-surface-container-lowest p-8 rounded-lg shadow-sm border-t-4 border-primary">
+<div class="flex items-center gap-4 mb-6">
+<div class="bg-primary-container p-3 rounded-full text-white">
+<span class="material-symbols-outlined">location_on</span>
+</div>
+<div>
+<h3 class="font-headline font-bold text-xl text-primary">Dakar Office</h3>
+<p class="text-sm font-label text-secondary">Headquarters</p>
+</div>
+</div>
+<p class="text-secondary font-body leading-relaxed mb-6">
+                            Rufisque Ouest, Dakar, Senegal<br/>
+                            Strategic Information Hub
+                        </p>
+<div class="space-y-4 pt-6 border-t border-surface-container">
+<div class="flex items-center gap-3 text-sm font-label text-on-surface">
+<span class="material-symbols-outlined text-primary text-lg">mail</span>
+                                office@bea-afrique.sn
+                            </div>
+<div class="flex items-center gap-3 text-sm font-label text-on-surface">
+<span class="material-symbols-outlined text-primary text-lg">call</span>
+                                +221 33 800 00 00
+                            </div>
+</div>
+</div>
+<!-- Minimal Map Placeholder -->
+<div class="bg-surface-container-highest h-64 rounded-lg overflow-hidden relative grayscale hover:grayscale-0 transition-all duration-700">
+<div class="w-full h-full bg-slate-300" data-location="Rufisque, Senegal" style="">
+<img class="w-full h-full object-cover" data-alt="Clean minimal architectural map of Rufisque Ouest area in Dakar with simple blue and grey tones" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC6I04oU0uo1LyeCuVeHBcEIp1NeB94C-eFN5xcVagrya-BDh8ca5y6i6BZsW2Ryo18y6X7h53lP7LJnawNnbR_KfsEBhtGwND2Ptc3wZ_Wyl3h39e_6HC3QBTFBeuhz6X3wPlBNJNWfPGH0B4e9rsfpxGCgOcOEgIyy1WilaICEc45XiTsjx6YUvLnbWIbqVffK21VHd__OmIrCflsxjdEryHW3nxjlXmB4Aej_T7N-ekp6V35-iwQ9V5_eQHn0q_bZCD1c2lJlg"/>
+</div>
+<div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+<div class="w-8 h-8 bg-primary rounded-full animate-pulse flex items-center justify-center">
+<div class="w-2 h-2 bg-white rounded-full"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Direct Channels (Subtle Tonal Separation) -->
+<section class="px-8 py-24 bg-surface max-w-7xl mx-auto">
+<h2 class="font-headline font-black text-3xl text-primary mb-12 text-center">Specific Inquiries</h2>
+<div class="grid md:grid-cols-2 gap-8">
+<a class="group bg-surface-container p-8 rounded-lg flex items-start gap-6 hover:bg-primary transition-all duration-300" href="#">
+<div class="bg-white/20 p-4 rounded-lg group-hover:bg-white/10">
+<span class="material-symbols-outlined text-primary group-hover:text-white" style="font-size: 40px;">architecture</span>
+</div>
+<div>
+<h4 class="font-headline font-bold text-xl text-primary group-hover:text-white mb-2">Consultancy Inquiries</h4>
+<p class="text-secondary group-hover:text-white/80 font-body">Institutional strategy and architectural auditing requests.</p>
+</div>
+</a>
+<a class="group bg-surface-container p-8 rounded-lg flex items-start gap-6 hover:bg-primary transition-all duration-300" href="#">
+<div class="bg-white/20 p-4 rounded-lg group-hover:bg-white/10">
+<span class="material-symbols-outlined text-primary group-hover:text-white" style="font-size: 40px;">school</span>
+</div>
+<div>
+<h4 class="font-headline font-bold text-xl text-primary group-hover:text-white mb-2">Training Admissions</h4>
+<p class="text-secondary group-hover:text-white/80 font-body">Enrollment information for our certified training programs.</p>
+</div>
+</a>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-slate-50 dark:bg-slate-900 w-full mt-auto">
+<div class="flex flex-col md:flex-row justify-between items-center px-12 py-16 gap-8 w-full max-w-7xl mx-auto">
+<div class="space-y-4 text-center md:text-left">
+<div class="font-['Inter'] font-bold text-lg text-slate-900 dark:text-white">BOSSE ELANPRO AFRIQUE</div>
+<p class="font-['Noto_Serif'] text-sm leading-relaxed text-slate-500 max-w-xs">
+                    Headquarters: Rufisque Ouest, Dakar, Senegal.<br/>
+                    Registered Capital: 1,000,000 FCFA.
+                </p>
+<p class="font-['Noto_Serif'] text-sm leading-relaxed text-slate-500 dark:text-slate-400 opacity-80 hover:opacity-100 transition-opacity">
+                    © 2024 Institutional Consultancy Firm. Dakar Office - Capital Information.
+                </p>
+</div>
+<div class="flex flex-wrap justify-center gap-8">
+<a class="font-['Noto_Serif'] text-sm text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="#">Privacy Policy</a>
+<a class="font-['Noto_Serif'] text-sm text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="#">Terms of Service</a>
+<a class="font-['Noto_Serif'] text-sm text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="#">Institutional Profile</a>
+</div>
+</div>
+</footer>
+</body></html>

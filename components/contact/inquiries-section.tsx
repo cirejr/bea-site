@@ -2,6 +2,7 @@
 
 import Link from "next/link"
 import { useTranslations } from "next-intl"
+import { BeaHugeicon } from "@/components/home/hugeicon"
 
 export type BeaContactInquiriesSectionProps = Readonly<Record<string, never>>
 
@@ -21,13 +22,11 @@ export function BeaContactInquiriesSection(
             href={t("consultancy.href")}
             className="group flex items-start gap-6 rounded-[var(--radius-bea)] bg-bea-surface-container p-8 transition-all duration-300 hover:bg-bea-primary"
           >
-            <div className="bea-material-symbols flex h-14 w-14 items-center justify-center rounded-lg bg-white/20 group-hover:bg-white/10">
-              <span
-                className="text-4xl text-bea-primary group-hover:text-white"
-                style={{ fontSize: "40px" }}
-              >
-                {t("consultancy.icon")}
-              </span>
+            <div className="flex h-14 w-14 items-center justify-center rounded-lg bg-white/20 group-hover:bg-white/10">
+              <BeaHugeicon
+                name={t("consultancy.icon")}
+                className="text-bea-primary group-hover:text-white"
+              />
             </div>
             <div>
               <h4 className="mb-2 font-bea-headline text-xl font-bold text-bea-primary group-hover:text-white">
@@ -42,13 +41,11 @@ export function BeaContactInquiriesSection(
             href={t("training.href")}
             className="group flex items-start gap-6 rounded-[var(--radius-bea)] bg-bea-surface-container p-8 transition-all duration-300 hover:bg-bea-primary"
           >
-            <div className="bea-material-symbols flex h-14 w-14 items-center justify-center rounded-lg bg-white/20 group-hover:bg-white/10">
-              <span
-                className="text-4xl text-bea-primary group-hover:text-white"
-                style={{ fontSize: "40px" }}
-              >
-                {t("training.icon")}
-              </span>
+            <div className="flex h-14 w-14 items-center justify-center rounded-lg bg-white/20 group-hover:bg-white/10">
+              <BeaHugeicon
+                name={t("training.icon")}
+                className="text-bea-primary group-hover:text-white"
+              />
             </div>
             <div>
               <h4 className="mb-2 font-bea-headline text-xl font-bold text-bea-primary group-hover:text-white">

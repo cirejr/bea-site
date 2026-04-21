@@ -25,26 +25,26 @@ export function BeaHeroSection() {
       </div>
       <div className="relative z-10 mx-auto w-full max-w-7xl px-8">
         <div className="max-w-3xl">
-          <h1 className="mb-6 font-bea-headline text-6xl leading-tight font-black text-white md:text-7xl">
+          <h1 className="mb-4 md:mb-6 font-bea-headline text-3xl leading-tight font-black text-white md:text-5xl lg:text-6xl lg:md:text-7xl">
             {t("title")}
             <span className="text-bea-primary-fixed">
               {" "}
               {t("titleHighlight")}
             </span>
           </h1>
-          <p className="mb-10 max-w-xl font-bea-body text-xl text-bea-on-primary-container/80 italic">
+          <p className="mb-6 md:mb-10 max-w-xl font-bea-body text-base md:text-xl text-bea-on-primary-container/80 italic">
             {t("description")}
           </p>
-          <div className="flex gap-4">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
             <Link href="/training">
-              <Button className="h-auto rounded-bea-lg bg-bea-primary-container px-8 py-4 font-bea-headline text-lg font-bold text-white hover:brightness-110">
+              <Button className="h-auto rounded-bea-lg bg-bea-primary-container px-6 py-3 md:px-8 md:py-4 font-bea-headline text-base md:text-lg font-bold text-white hover:brightness-110">
                 {t("ctaPrimary")}
               </Button>
             </Link>
             <Link href="/consultancy">
               <Button
                 variant="ghost"
-                className="bea-glass-panel h-auto rounded-bea-lg border border-white/20 bg-transparent px-8 py-4 font-bea-headline text-lg font-bold text-white hover:bg-white/10"
+                className="bea-glass-panel h-auto rounded-bea-lg border border-white/20 bg-transparent px-6 py-3 md:px-8 md:py-4 font-bea-headline text-base md:text-lg font-bold text-white hover:bg-white/10"
               >
                 {t("ctaSecondary")}
               </Button>

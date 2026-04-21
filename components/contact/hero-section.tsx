@@ -15,10 +15,10 @@ export function BeaContactHeroSection(_props: BeaContactHeroSectionProps) {
           <span className="font-bea-headline text-xs font-bold tracking-widest text-bea-primary uppercase">
             {t("eyebrow")}
           </span>
-          <h1 className="font-bea-headline text-5xl font-black tracking-tighter text-bea-primary lg:text-7xl">
+          <h1 className="font-bea-headline text-3xl md:text-4xl lg:text-7xl font-black tracking-tighter text-bea-primary">
             {t("title")}
           </h1>
-          <p className="max-w-md font-bea-body text-lg leading-relaxed text-bea-secondary">
+          <p className="max-w-md font-bea-body text-base md:text-lg leading-relaxed text-bea-secondary">
             {t("subtitle")}
           </p>
         </div>

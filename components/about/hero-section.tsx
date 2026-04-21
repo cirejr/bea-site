@@ -15,10 +15,10 @@ export function BeaAboutHeroSection(_props: BeaAboutHeroSectionProps) {
           <span className="mb-4 inline-block font-bea-headline text-xs font-bold tracking-widest text-bea-primary uppercase">
             {t("eyebrow")}
           </span>
-          <h1 className="mb-8 font-bea-headline text-6xl leading-tight font-black tracking-tighter text-bea-primary md:text-7xl">
+          <h1 className="mb-4 md:mb-8 font-bea-headline text-3xl leading-tight font-black tracking-tighter text-bea-primary md:text-5xl lg:text-7xl">
             {t("title")}
           </h1>
-          <p className="max-w-lg font-bea-body text-lg leading-relaxed italic text-bea-on-surface-variant md:text-xl">
+          <p className="max-w-lg font-bea-body text-base md:text-lg leading-relaxed italic text-bea-on-surface-variant lg:text-xl">
             {t("description")}
           </p>
         </div>

@@ -25,10 +25,10 @@ export function BeaConsultancyHeroSection(_props: BeaConsultancyHeroSectionProps
       </div>
       <div className="z-10 mx-auto max-w-4xl text-center md:ml-20 md:text-left">
         <div className="bea-glass-effect rounded-bea-lg border border-white/20 bg-white/10 p-12 shadow-2xl">
-          <h1 className="mb-6 font-bea-headline text-5xl leading-tight font-black tracking-tighter text-white md:text-7xl">
+          <h1 className="mb-4 md:mb-6 font-bea-headline text-3xl leading-tight font-black tracking-tighter text-white md:text-5xl lg:text-7xl">
             {t("title")}
           </h1>
-          <p className="mb-10 max-w-2xl font-bea-body text-xl leading-relaxed text-white/90 md:text-2xl">
+          <p className="mb-6 md:mb-10 max-w-2xl font-bea-body text-base md:text-xl leading-relaxed text-white/90 lg:text-2xl">
             {t("description")}
           </p>
           <div className="flex flex-col gap-4 sm:flex-row">

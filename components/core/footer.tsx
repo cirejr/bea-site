@@ -1,5 +1,6 @@
 "use client"
 
+import Image from "next/image"
 import { useTranslations } from "next-intl"
 import { Link } from "@/i18n/navigation"
 
@@ -12,9 +13,13 @@ export function BeaFooter(_props: BeaFooterProps) {
     <footer className="w-full bg-bea-primary-container">
       <div className="mx-auto flex max-w-screen-2xl flex-col items-center justify-between gap-8 px-8 py-12 md:flex-row">
         <div className="flex flex-col items-center gap-4 md:items-start">
-          <span className="font-bea-headline text-xl font-bold text-white">
-            {t("company")}
-          </span>
+          <Image
+            src="/bea-logo-inverted-transparent.png"
+            alt="B.E.A."
+            width={120}
+            height={40}
+            className="h-8 w-auto"
+          />
           <p className="font-bea-body text-sm text-white/70">
             {t("address")}
           </p>

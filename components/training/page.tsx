@@ -4,18 +4,17 @@ import { Suspense } from "react"
 import { useSearchParams } from "next/navigation"
 import { BeaTrainingGridSection } from "./grid-section"
 import { BeaTrainingHeroSection } from "./hero-section"
-import { BeaTrainingSidebarSection } from "./sidebar-section"
 
 function TrainingPageContent() {
   const searchParams = useSearchParams()
-  const category = searchParams.get("category") || null
+  const domain = searchParams.get("domain") || null
 
   return (
-    <div className="flex pt-20 min-h-screen max-w-7xl mx-auto">
-      <main className="flex-1 px-8 lg:px-12 py-10 bg-bea-surface font-bea-body text-bea-on-surface antialiased">
+    <div className="min-h-screen pt-20">
+      <div className="mx-auto max-w-7xl px-4 md:px-8 py-10 md:py-16">
         <BeaTrainingHeroSection />
-        <BeaTrainingGridSection activeCategory={category as never} />
-      </main>
+        <BeaTrainingGridSection activeDomain={domain} />
+      </div>
     </div>
   )
 }
@@ -25,9 +24,8 @@ export type BeaTrainingPageProps = Readonly<Record<string, never>>
 export function BeaTrainingPage(_props: BeaTrainingPageProps) {
   return (
     <Suspense fallback={
-      <div className="flex pt-20 min-h-screen">
-        <div className="w-64 bg-bea-surface hidden md:flex" />
-        <div className="flex-1 px-8 lg:px-12 py-10 bg-bea-surface" />
+      <div className="min-h-screen pt-20">
+        <div className="mx-auto max-w-7xl px-4 md:px-8 py-10 md:py-16" />
       </div>
     }>
       <TrainingPageContent />

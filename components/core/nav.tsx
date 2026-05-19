@@ -17,6 +17,7 @@ import { LocaleSwitcher } from "./locale-switcher"
 import { BeaHugeicon } from "../home/hugeicon"
 import { Menu02FreeIcons } from "@hugeicons/core-free-icons"
 import { NavDropdown } from "./nav-dropdown"
+import type { Domain, SubCategory } from "@/lib/data"
 import { HugeiconsIcon } from "@hugeicons/react"
 import {
   Accordion,
@@ -27,7 +28,7 @@ import {
 
 const LOGO_SRC = "/bea-logo-inverted-transparent.png"
 
-export function BeaNav() {
+export function BeaNav({ trainingNavigation = [] }: { trainingNavigation?: (Domain & { subCategories: SubCategory[] })[] }) {
   const pathname = usePathname()
   const t = useTranslations("nav")
   const locale = useLocale()
@@ -134,6 +135,15 @@ export function BeaNav() {
     },
   ]
 
+  const dbTrainingDomains = trainingNavigation.map((domain) => ({
+    label: domain.label,
+    items: domain.subCategories.map((subCategory) => ({
+      label: subCategory.label,
+      href: `/training/${domain.slug}?subCategory=${subCategory.slug}`,
+    })),
+  }))
+  const renderedTrainingDomains = dbTrainingDomains.length > 0 ? dbTrainingDomains : trainingDomains
+
   function isActivePath(pathname: string, href: string): boolean {
     const normalizedPathname = pathname === `/${locale}` ? "/" : pathname.replace(`/${locale}`, "")
     if (href === "/") return normalizedPathname === "/"
@@ -155,7 +165,7 @@ export function BeaNav() {
             />
           </Link>
           <div className="hidden lg:block">
-            <NavDropdown />
+            <NavDropdown trainingNavigation={trainingNavigation} />
           </div>
         </div>
         <div className="flex items-center gap-2 md:gap-4">
@@ -211,21 +221,21 @@ export function BeaNav() {
                       </AccordionTrigger>
                       <AccordionContent className="[&_a]:no-underline px-0 pb-0">
                         <div className="flex flex-col">
-                          {trainingDomains.map((domain) => (
-                            <Accordion key={domain.key} className="border-0 rounded-none">
+                          {renderedTrainingDomains.map((domain) => (
+                            <Accordion key={"key" in domain ? domain.key : domain.label} className="border-0 rounded-none">
                               <AccordionItem className="border-0 data-open:bg-transparent">
                                 <AccordionTrigger className="flex items-center justify-between w-full py-2.5 px-5 text-sm font-medium hover:text-foreground hover:bg-accent/50 transition-colors [&_[data-slot=accordion-trigger-icon]]:size-3.5 [&_[data-slot=accordion-trigger-icon]]:text-muted-foreground">
-                                  {t(domain.key)}
+                                  {"key" in domain ? t(domain.key) : domain.label}
                                 </AccordionTrigger>
                                 <AccordionContent className="[&_a]:no-underline px-0 pb-1">
                                   <div className="flex flex-col gap-0.5 pl-3 pr-2">
                                     {domain.items.map((item) => (
-                                      <DrawerClose asChild key={item.key}>
+                                      <DrawerClose asChild key={"key" in item ? item.key : item.label}>
                                         <Link
                                           href={item.href}
                                           className="block pl-7 pr-4 py-2 text-sm hover:text-bea-primary hover:bg-bea-surface-container rounded-[var(--radius-bea)] transition-colors duration-200"
                                         >
-                                          {t(item.key)}
+                                          {"key" in item ? t(item.key) : item.label}
                                         </Link>
                                       </DrawerClose>
                                     ))}

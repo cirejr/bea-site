@@ -22,6 +22,8 @@ import {
   Certificate01Icon,
   UserGroupIcon,
   StarIcon,
+  File01Icon,
+  HelpCircleIcon as FaqIcon,
   Settings05Icon,
   HelpCircleIcon,
   CommandIcon,
@@ -29,17 +31,22 @@ import {
 
 const navMain = [
   {
-    title: "Dashboard",
+    title: "Tableau de bord",
     url: "/dashboard",
     icon: <HugeiconsIcon icon={DashboardSquare01Icon} strokeWidth={2} />,
   },
   {
-    title: "Courses",
+    title: "Formations",
+    url: "/dashboard/formations",
+    icon: <HugeiconsIcon icon={GraduationCap} strokeWidth={2} />,
+  },
+  {
+    title: "Cours",
     url: "/dashboard/courses",
     icon: <HugeiconsIcon icon={GraduationCap} strokeWidth={2} />,
   },
   {
-    title: "Domains",
+    title: "Domaines",
     url: "/dashboard/domains",
     icon: <HugeiconsIcon icon={GlobeIcon} strokeWidth={2} />,
   },
@@ -49,12 +56,22 @@ const navMain = [
     icon: <HugeiconsIcon icon={Certificate01Icon} strokeWidth={2} />,
   },
   {
-    title: "Testimonials",
+    title: "Témoignages",
     url: "/dashboard/testimonials",
     icon: <HugeiconsIcon icon={UserGroupIcon} strokeWidth={2} />,
   },
   {
-    title: "Featured",
+    title: "PDFs",
+    url: "/dashboard/pdfs",
+    icon: <HugeiconsIcon icon={File01Icon} strokeWidth={2} />,
+  },
+  {
+    title: "FAQ",
+    url: "/dashboard/faqs",
+    icon: <HugeiconsIcon icon={FaqIcon} strokeWidth={2} />,
+  },
+  {
+    title: "À la une",
     url: "/dashboard/featured",
     icon: <HugeiconsIcon icon={StarIcon} strokeWidth={2} />,
   },
@@ -62,12 +79,12 @@ const navMain = [
 
 const navSecondary = [
   {
-    title: "Settings",
+    title: "Paramètres",
     url: "#",
     icon: <HugeiconsIcon icon={Settings05Icon} strokeWidth={2} />,
   },
   {
-    title: "Get Help",
+    title: "Aide",
     url: "#",
     icon: <HugeiconsIcon icon={HelpCircleIcon} strokeWidth={2} />,
   },

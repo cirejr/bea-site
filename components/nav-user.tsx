@@ -80,11 +80,11 @@ export function NavUser({
             <DropdownMenuGroup>
               <DropdownMenuItem>
                 <HugeiconsIcon icon={UserCircle02Icon} strokeWidth={2} />
-                Account
+                Compte
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <HugeiconsIcon icon={CreditCardIcon} strokeWidth={2} />
-                Billing
+                Facturation
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <HugeiconsIcon icon={Notification03Icon} strokeWidth={2} />
@@ -94,7 +94,7 @@ export function NavUser({
             <DropdownMenuSeparator />
             <DropdownMenuItem>
               <HugeiconsIcon icon={Logout01Icon} strokeWidth={2} />
-              Log out
+              Déconnexion
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

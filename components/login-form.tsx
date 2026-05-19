@@ -33,7 +33,7 @@ export function LoginForm({
 
     const { error: authError } = await authClient.signIn.email({ email, password })
     if (authError) {
-      setError(authError.message || "Invalid email or password")
+      setError(authError.message || "Email ou mot de passe invalide")
       setLoading(false)
     } else {
       router.push("/dashboard")
@@ -45,9 +45,9 @@ export function LoginForm({
     <form className={cn("flex flex-col gap-6", className)} onSubmit={handleSubmit} {...props}>
       <FieldGroup>
         <div className="flex flex-col items-center gap-1 text-center">
-          <h1 className="text-2xl font-bold">Login to your account</h1>
+          <h1 className="text-2xl font-bold">Connexion à votre compte</h1>
           <p className="text-sm text-balance text-muted-foreground">
-            Enter your email below to login to your account
+            Saisissez votre email ci-dessous pour vous connecter
           </p>
         </div>
         {error && (
@@ -61,19 +61,19 @@ export function LoginForm({
         </Field>
         <Field>
           <div className="flex items-center">
-            <FieldLabel htmlFor="password">Password</FieldLabel>
+            <FieldLabel htmlFor="password">Mot de passe</FieldLabel>
             <a
               href="#"
               className="ml-auto text-sm underline-offset-4 hover:underline"
             >
-              Forgot your password?
+              Mot de passe oublié ?
             </a>
           </div>
           <Input id="password" name="password" type="password" required />
         </Field>
         <Field>
           <Button type="submit" disabled={loading} className="w-full">
-            {loading ? "Signing in..." : "Login"}
+            {loading ? "Connexion..." : "Se connecter"}
           </Button>
         </Field>
       </FieldGroup>

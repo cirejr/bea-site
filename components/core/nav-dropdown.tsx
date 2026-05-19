@@ -2,9 +2,19 @@
 
 import { useTranslations } from "next-intl"
 import { DropdownNavigation } from "@/components/ui/dorpdown-navigation"
+import type { Domain, SubCategory } from "@/lib/data"
 
-function NavDropdown() {
+function NavDropdown({ trainingNavigation = [] }: { trainingNavigation?: (Domain & { subCategories: SubCategory[] })[] }) {
   const t = useTranslations("nav")
+
+  const dbTrainingSubMenus = trainingNavigation.map((domain) => ({
+    title: domain.label,
+    href: `/training/${domain.slug}`,
+    items: domain.subCategories.map((subCategory) => ({
+      label: subCategory.label,
+      href: `/training/${domain.slug}?subCategory=${subCategory.slug}`,
+    })),
+  }))
 
   const NAV_ITEMS = [
     {
@@ -20,7 +30,7 @@ function NavDropdown() {
     {
       id: 3,
       label: t("training"),
-      subMenus: [
+      subMenus: dbTrainingSubMenus.length > 0 ? dbTrainingSubMenus : [
         {
           title: t("training_domain_chiffre"),
           href: "/training/chiffre",

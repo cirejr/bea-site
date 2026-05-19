@@ -11,31 +11,31 @@ import {
 import { HugeiconsIcon } from "@hugeicons/react"
 import { CourseIcon, GlobeIcon, Certificate01Icon, UserGroupIcon } from "@hugeicons/core-free-icons"
 
-export function SectionCards({ stats }: { stats: { courseCount: number; domainCount: number; testimonialCount: number; certCount: number } }) {
+export function SectionCards({ stats }: { stats: { formationCount: number; courseCount: number; domainCount: number; testimonialCount: number; certCount: number } }) {
   const items = [
     {
-      title: stats.courseCount.toString(),
-      description: "Total Courses",
+      title: stats.formationCount.toString(),
+      description: "Total formations",
       icon: CourseIcon,
-      footer: "Active training programs",
+      footer: "Programmes actifs",
     },
     {
       title: stats.domainCount.toString(),
-      description: "Domains",
+      description: "Domaines",
       icon: GlobeIcon,
-      footer: "Training categories",
+      footer: "Catégories de formation",
     },
     {
       title: stats.certCount.toString(),
       description: "Certifications",
       icon: Certificate01Icon,
-      footer: "AMF & other certs",
+      footer: "AMF & autres certifs",
     },
     {
       title: stats.testimonialCount.toString(),
-      description: "Testimonials",
+      description: "Témoignages",
       icon: UserGroupIcon,
-      footer: "Active reviews",
+      footer: "Avis actifs",
     },
   ]
 

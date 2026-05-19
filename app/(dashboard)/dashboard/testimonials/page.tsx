@@ -11,8 +11,8 @@ export default async function TestimonialsPage() {
     <div className="px-4 lg:px-6">
       <div className="mb-6 flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold">Testimonials</h1>
-          <p className="text-muted-foreground">{testimonials.length} active</p>
+          <h1 className="text-2xl font-bold">Témoignages</h1>
+          <p className="text-muted-foreground">{testimonials.length} actif(s)</p>
         </div>
       </div>
 

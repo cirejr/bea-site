@@ -1,13 +1,16 @@
 import { sql } from "drizzle-orm"
-import { pgTable, text, integer, decimal, pgEnum, timestamp, jsonb, boolean, unique, primaryKey } from "drizzle-orm/pg-core"
+import { pgTable, text, integer, pgEnum, timestamp, boolean, primaryKey } from "drizzle-orm/pg-core"
 
 export const badgeEnum = pgEnum("badge", ["Nouveauté", "Incontournable"])
+export const resourceTypeEnum = pgEnum("resource_type", ["brochure", "program", "guide", "certificate", "other"])
 
 export const domains = pgTable("domains", {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
   slug: text().notNull().unique(),
   label: text().notNull(),
+  description: text(),
   iconName: text(),
+  isActive: boolean().default(true).notNull(),
   sortOrder: integer().default(0).notNull(),
   createdAt: timestamp({ withTimezone: true }).default(sql`now()`).notNull(),
   updatedAt: timestamp({ withTimezone: true }).default(sql`now()`).notNull(),
@@ -18,6 +21,8 @@ export const subCategories = pgTable("sub_categories", {
   domainId: integer().notNull().references(() => domains.id, { onDelete: "cascade" }),
   slug: text().notNull().unique(),
   label: text().notNull(),
+  description: text(),
+  isActive: boolean().default(true).notNull(),
   sortOrder: integer().default(0).notNull(),
   createdAt: timestamp({ withTimezone: true }).default(sql`now()`).notNull(),
   updatedAt: timestamp({ withTimezone: true }).default(sql`now()`).notNull(),
@@ -30,29 +35,35 @@ export const modalites = pgTable("modalites", {
   createdAt: timestamp({ withTimezone: true }).default(sql`now()`).notNull(),
 })
 
-export const courses = pgTable("courses", {
+export const formations = pgTable("formations", {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
-  domainId: integer().notNull().references(() => domains.id),
+  domainId: integer().notNull().references(() => domains.id, { onDelete: "restrict" }),
   subCategoryId: integer().references(() => subCategories.id),
   title: text().notNull(),
   slug: text().notNull().unique(),
+  summary: text(),
+  description: text(),
   price: text(),
+  salePrice: text(),
+  currency: text().default("EUR"),
+  taxLabel: text().default("HT"),
+  priceVisible: boolean().default(true).notNull(),
   rating: text(),
   reviewsCount: integer().default(0),
   duration: text(),
   badge: badgeEnum(),
   href: text(),
   isActive: boolean().default(true).notNull(),
-  description: text(),
+  sortOrder: integer().default(0).notNull(),
   createdAt: timestamp({ withTimezone: true }).default(sql`now()`).notNull(),
   updatedAt: timestamp({ withTimezone: true }).default(sql`now()`).notNull(),
 })
 
-export const courseModalities = pgTable("course_modalities", {
-  courseId: integer().notNull().references(() => courses.id, { onDelete: "cascade" }),
+export const formationModalities = pgTable("formation_modalities", {
+  formationId: integer().notNull().references(() => formations.id, { onDelete: "cascade" }),
   modalityId: integer().notNull().references(() => modalites.id),
 }, (t) => [
-  primaryKey({ columns: [t.courseId, t.modalityId] }),
+  primaryKey({ columns: [t.formationId, t.modalityId] }),
 ])
 
 export const certifications = pgTable("certifications", {
@@ -64,6 +75,60 @@ export const certifications = pgTable("certifications", {
   audience: text(),
   href: text().default("#"),
   groupKey: text(),
+  isActive: boolean().default(true).notNull(),
+  sortOrder: integer().default(0).notNull(),
+  createdAt: timestamp({ withTimezone: true }).default(sql`now()`).notNull(),
+  updatedAt: timestamp({ withTimezone: true }).default(sql`now()`).notNull(),
+})
+
+export const courses = pgTable("courses", {
+  id: integer().primaryKey().generatedAlwaysAsIdentity(),
+  formationId: integer().notNull().references(() => formations.id, { onDelete: "cascade" }),
+  title: text().notNull(),
+  slug: text().notNull().unique(),
+  summary: text(),
+  duration: text(),
+  modality: text(),
+  isActive: boolean().default(true).notNull(),
+  sortOrder: integer().default(0).notNull(),
+  createdAt: timestamp({ withTimezone: true }).default(sql`now()`).notNull(),
+  updatedAt: timestamp({ withTimezone: true }).default(sql`now()`).notNull(),
+})
+
+export const formationCertifications = pgTable("formation_certifications", {
+  formationId: integer().notNull().references(() => formations.id, { onDelete: "cascade" }),
+  certificationId: integer().notNull().references(() => certifications.id, { onDelete: "cascade" }),
+}, (t) => [
+  primaryKey({ columns: [t.formationId, t.certificationId] }),
+])
+
+export const faqs = pgTable("faqs", {
+  id: integer().primaryKey().generatedAlwaysAsIdentity(),
+  question: text().notNull(),
+  answer: text().notNull(),
+  domainId: integer().references(() => domains.id, { onDelete: "cascade" }),
+  subCategoryId: integer().references(() => subCategories.id, { onDelete: "cascade" }),
+  formationId: integer().references(() => formations.id, { onDelete: "cascade" }),
+  courseId: integer().references(() => courses.id, { onDelete: "cascade" }),
+  certificationId: integer().references(() => certifications.id, { onDelete: "cascade" }),
+  isActive: boolean().default(true).notNull(),
+  sortOrder: integer().default(0).notNull(),
+  createdAt: timestamp({ withTimezone: true }).default(sql`now()`).notNull(),
+  updatedAt: timestamp({ withTimezone: true }).default(sql`now()`).notNull(),
+})
+
+export const pdfResources = pgTable("pdf_resources", {
+  id: integer().primaryKey().generatedAlwaysAsIdentity(),
+  title: text().notNull(),
+  description: text(),
+  url: text().notNull(),
+  resourceType: resourceTypeEnum().default("other").notNull(),
+  domainId: integer().references(() => domains.id, { onDelete: "cascade" }),
+  subCategoryId: integer().references(() => subCategories.id, { onDelete: "cascade" }),
+  formationId: integer().references(() => formations.id, { onDelete: "cascade" }),
+  courseId: integer().references(() => courses.id, { onDelete: "cascade" }),
+  certificationId: integer().references(() => certifications.id, { onDelete: "cascade" }),
+  isActive: boolean().default(true).notNull(),
   sortOrder: integer().default(0).notNull(),
   createdAt: timestamp({ withTimezone: true }).default(sql`now()`).notNull(),
   updatedAt: timestamp({ withTimezone: true }).default(sql`now()`).notNull(),
@@ -81,9 +146,9 @@ export const testimonials = pgTable("testimonials", {
   updatedAt: timestamp({ withTimezone: true }).default(sql`now()`).notNull(),
 })
 
-export const featuredCourses = pgTable("featured_courses", {
+export const featuredFormations = pgTable("featured_formations", {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
-  courseId: integer().notNull().unique().references(() => courses.id, { onDelete: "cascade" }),
+  formationId: integer().notNull().unique().references(() => formations.id, { onDelete: "cascade" }),
   sortOrder: integer().default(0).notNull(),
   createdAt: timestamp({ withTimezone: true }).default(sql`now()`).notNull(),
 })

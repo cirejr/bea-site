@@ -1,225 +1,292 @@
 "use server"
 
 import { revalidatePath } from "next/cache"
+import { eq } from "drizzle-orm"
 import { getDb as _getDb } from "@/db"
 import {
+  certifications as dCertifications,
   courses as dCourses,
   domains as dDomains,
-  subCategories as dSubCategories,
+  faqs as dFaqs,
+  featuredFormations as dFeaturedFormations,
+  formationCertifications as dFormationCertifications,
+  formationModalities as dFormationModalities,
+  formations as dFormations,
   modalites as dModalites,
-  certifications as dCertifications,
+  pdfResources as dPdfResources,
+  subCategories as dSubCategories,
   testimonials as dTestimonials,
-  featuredCourses as dFeaturedCourses,
-  courseModalities as dCourseModalities,
-} from "@/db"
-import { eq } from "drizzle-orm"
+} from "@/db/schema"
 
 const db = () => _getDb()
 
-// ── Courses ──
+function revalidateCatalogue() {
+  revalidatePath("/dashboard")
+  revalidatePath("/dashboard/formations")
+  revalidatePath("/dashboard/courses")
+  revalidatePath("/training")
+}
 
-export async function createCourse(data: {
+// Formations
+export async function createFormation(data: {
   domainId: number
   subCategoryId?: number | null
   title: string
   slug: string
+  summary?: string | null
+  description?: string | null
   price?: string | null
+  salePrice?: string | null
+  currency?: string | null
+  taxLabel?: string | null
+  priceVisible?: boolean
   rating?: string | null
   reviewsCount?: number
   duration?: string | null
   badge?: string | null
   href?: string | null
-  description?: string | null
+  isActive?: boolean
+  sortOrder?: number
   modalityIds?: number[]
+  certificationIds?: number[]
 }) {
-  const [course] = await db()
-    .insert(dCourses)
+  const [formation] = await db()
+    .insert(dFormations)
     .values({
       domainId: data.domainId,
       subCategoryId: data.subCategoryId ?? null,
       title: data.title,
       slug: data.slug,
+      summary: data.summary ?? null,
+      description: data.description ?? null,
       price: data.price ?? null,
+      salePrice: data.salePrice ?? null,
+      currency: data.currency || "EUR",
+      taxLabel: data.taxLabel || "HT",
+      priceVisible: data.priceVisible ?? true,
       rating: data.rating ?? null,
       reviewsCount: data.reviewsCount ?? 0,
       duration: data.duration ?? null,
-      badge: data.badge as any ?? null,
+      badge: (data.badge || null) as any,
       href: data.href ?? null,
-      description: data.description ?? null,
+      isActive: data.isActive ?? true,
+      sortOrder: data.sortOrder ?? 0,
     })
     .returning()
 
   if (data.modalityIds?.length) {
-    await db()
-      .insert(dCourseModalities)
-      .values(data.modalityIds.map((modalityId) => ({ courseId: course.id, modalityId })))
+    await db().insert(dFormationModalities).values(data.modalityIds.map((modalityId) => ({ formationId: formation.id, modalityId })))
   }
 
-  revalidatePath("/dashboard/courses")
-  return course
+  if (data.certificationIds?.length) {
+    await db().insert(dFormationCertifications).values(data.certificationIds.map((certificationId) => ({ formationId: formation.id, certificationId })))
+  }
+
+  revalidateCatalogue()
+  return formation
 }
 
-export async function updateCourse(
+export async function updateFormation(
   id: number,
   data: {
     domainId?: number
     subCategoryId?: number | null
     title?: string
     slug?: string
+    summary?: string | null
+    description?: string | null
     price?: string | null
+    salePrice?: string | null
+    currency?: string | null
+    taxLabel?: string | null
+    priceVisible?: boolean
     rating?: string | null
     reviewsCount?: number
     duration?: string | null
     badge?: string | null
     href?: string | null
     isActive?: boolean
-    description?: string | null
+    sortOrder?: number
     modalityIds?: number[]
+    certificationIds?: number[]
   },
 ) {
-  const { modalityIds, ...fields } = data
-  await db().update(dCourses).set(fields as any).where(eq(dCourses.id, id))
+  const { modalityIds, certificationIds, ...fields } = data
+  await db().update(dFormations).set(fields as any).where(eq(dFormations.id, id))
 
   if (modalityIds !== undefined) {
-    await db().delete(dCourseModalities).where(eq(dCourseModalities.courseId, id))
+    await db().delete(dFormationModalities).where(eq(dFormationModalities.formationId, id))
     if (modalityIds.length > 0) {
-      await db().insert(dCourseModalities).values(modalityIds.map((modalityId) => ({ courseId: id, modalityId })))
+      await db().insert(dFormationModalities).values(modalityIds.map((modalityId) => ({ formationId: id, modalityId })))
     }
   }
 
-  revalidatePath("/dashboard/courses")
+  if (certificationIds !== undefined) {
+    await db().delete(dFormationCertifications).where(eq(dFormationCertifications.formationId, id))
+    if (certificationIds.length > 0) {
+      await db().insert(dFormationCertifications).values(certificationIds.map((certificationId) => ({ formationId: id, certificationId })))
+    }
+  }
+
+  revalidateCatalogue()
+  revalidatePath(`/training/${fields.slug ?? ""}`)
+}
+
+export async function deleteFormation(id: number) {
+  await db().delete(dFormations).where(eq(dFormations.id, id))
+  revalidateCatalogue()
+}
+
+// Child courses
+export async function createCourse(data: {
+  formationId: number
+  title: string
+  slug: string
+  summary?: string | null
+  duration?: string | null
+  modality?: string | null
+  isActive?: boolean
+  sortOrder?: number
+}) {
+  const [course] = await db().insert(dCourses).values({ ...data, isActive: data.isActive ?? true, sortOrder: data.sortOrder ?? 0 }).returning()
+  revalidateCatalogue()
+  return course
+}
+
+export async function updateCourse(id: number, data: {
+  formationId?: number
+  title?: string
+  slug?: string
+  summary?: string | null
+  duration?: string | null
+  modality?: string | null
+  isActive?: boolean
+  sortOrder?: number
+}) {
+  await db().update(dCourses).set(data).where(eq(dCourses.id, id))
+  revalidateCatalogue()
 }
 
 export async function deleteCourse(id: number) {
   await db().delete(dCourses).where(eq(dCourses.id, id))
-  revalidatePath("/dashboard/courses")
+  revalidateCatalogue()
 }
 
-// ── Domains ──
-
-export async function createDomain(data: {
-  slug: string
-  label: string
-  iconName?: string | null
-  sortOrder?: number
-}) {
-  const [domain] = await db().insert(dDomains).values(data).returning()
+// Domains
+export async function createDomain(data: { slug: string; label: string; description?: string | null; iconName?: string | null; isActive?: boolean; sortOrder?: number }) {
+  const [domain] = await db().insert(dDomains).values({ ...data, isActive: data.isActive ?? true, sortOrder: data.sortOrder ?? 0 }).returning()
   revalidatePath("/dashboard/domains")
+  revalidateCatalogue()
   return domain
 }
 
-export async function updateDomain(
-  id: number,
-  data: { slug?: string; label?: string; iconName?: string | null; sortOrder?: number },
-) {
+export async function updateDomain(id: number, data: { slug?: string; label?: string; description?: string | null; iconName?: string | null; isActive?: boolean; sortOrder?: number }) {
   await db().update(dDomains).set(data).where(eq(dDomains.id, id))
   revalidatePath("/dashboard/domains")
+  revalidateCatalogue()
 }
 
 export async function deleteDomain(id: number) {
   await db().delete(dDomains).where(eq(dDomains.id, id))
   revalidatePath("/dashboard/domains")
+  revalidateCatalogue()
 }
 
-// ── Sub-categories ──
-
-export async function createSubCategory(data: {
-  domainId: number
-  slug: string
-  label: string
-  sortOrder?: number
-}) {
-  const [sub] = await db().insert(dSubCategories).values(data).returning()
+// Sub-categories
+export async function createSubCategory(data: { domainId: number; slug: string; label: string; description?: string | null; isActive?: boolean; sortOrder?: number }) {
+  const [sub] = await db().insert(dSubCategories).values({ ...data, isActive: data.isActive ?? true, sortOrder: data.sortOrder ?? 0 }).returning()
   revalidatePath("/dashboard/domains")
+  revalidateCatalogue()
   return sub
 }
 
-export async function updateSubCategory(
-  id: number,
-  data: { slug?: string; label?: string; sortOrder?: number },
-) {
+export async function updateSubCategory(id: number, data: { slug?: string; label?: string; description?: string | null; isActive?: boolean; sortOrder?: number }) {
   await db().update(dSubCategories).set(data).where(eq(dSubCategories.id, id))
   revalidatePath("/dashboard/domains")
+  revalidateCatalogue()
 }
 
 export async function deleteSubCategory(id: number) {
   await db().delete(dSubCategories).where(eq(dSubCategories.id, id))
   revalidatePath("/dashboard/domains")
+  revalidateCatalogue()
 }
 
-// ── Modalities ──
-
+// Modalities
 export async function createModality(data: { slug: string; label: string }) {
   const [m] = await db().insert(dModalites).values(data).returning()
-  revalidatePath("/dashboard/courses")
+  revalidateCatalogue()
   return m
 }
 
-// ── Certifications ──
-
-export async function createCertification(data: {
-  pageSlug?: string
-  title: string
-  description?: string | null
-  badge?: string | null
-  audience?: string | null
-  href?: string | null
-  groupKey?: string | null
-  sortOrder?: number
-}) {
-  const [cert] = await db().insert(dCertifications).values(data).returning()
+// Certifications
+export async function createCertification(data: { pageSlug?: string; title: string; description?: string | null; badge?: string | null; audience?: string | null; href?: string | null; groupKey?: string | null; isActive?: boolean; sortOrder?: number }) {
+  const [cert] = await db().insert(dCertifications).values({ ...data, isActive: data.isActive ?? true, sortOrder: data.sortOrder ?? 0 }).returning()
   revalidatePath("/dashboard/certifications")
+  revalidateCatalogue()
   return cert
 }
 
-export async function updateCertification(
-  id: number,
-  data: {
-    pageSlug?: string
-    title?: string
-    description?: string | null
-    badge?: string | null
-    audience?: string | null
-    href?: string | null
-    groupKey?: string | null
-    sortOrder?: number
-  },
-) {
+export async function updateCertification(id: number, data: { pageSlug?: string; title?: string; description?: string | null; badge?: string | null; audience?: string | null; href?: string | null; groupKey?: string | null; isActive?: boolean; sortOrder?: number }) {
   await db().update(dCertifications).set(data).where(eq(dCertifications.id, id))
   revalidatePath("/dashboard/certifications")
+  revalidateCatalogue()
 }
 
 export async function deleteCertification(id: number) {
   await db().delete(dCertifications).where(eq(dCertifications.id, id))
   revalidatePath("/dashboard/certifications")
+  revalidateCatalogue()
 }
 
-// ── Testimonials ──
+// FAQs
+export async function createFaq(data: { question: string; answer: string; domainId?: number | null; subCategoryId?: number | null; formationId?: number | null; courseId?: number | null; certificationId?: number | null; isActive?: boolean; sortOrder?: number }) {
+  const [faq] = await db().insert(dFaqs).values({ ...data, isActive: data.isActive ?? true, sortOrder: data.sortOrder ?? 0 }).returning()
+  revalidatePath("/dashboard/faqs")
+  revalidateCatalogue()
+  return faq
+}
 
-export async function createTestimonial(data: {
-  quote: string
-  name: string
-  role?: string | null
-  rating?: number
-  isActive?: boolean
-  sortOrder?: number
-}) {
+export async function updateFaq(id: number, data: { question?: string; answer?: string; domainId?: number | null; subCategoryId?: number | null; formationId?: number | null; courseId?: number | null; certificationId?: number | null; isActive?: boolean; sortOrder?: number }) {
+  await db().update(dFaqs).set(data).where(eq(dFaqs.id, id))
+  revalidatePath("/dashboard/faqs")
+  revalidateCatalogue()
+}
+
+export async function deleteFaq(id: number) {
+  await db().delete(dFaqs).where(eq(dFaqs.id, id))
+  revalidatePath("/dashboard/faqs")
+  revalidateCatalogue()
+}
+
+// PDFs
+export async function createPdfResource(data: { title: string; description?: string | null; url: string; resourceType?: "brochure" | "program" | "guide" | "certificate" | "other"; domainId?: number | null; subCategoryId?: number | null; formationId?: number | null; courseId?: number | null; certificationId?: number | null; isActive?: boolean; sortOrder?: number }) {
+  const [resource] = await db().insert(dPdfResources).values({ ...data, resourceType: data.resourceType ?? "other", isActive: data.isActive ?? true, sortOrder: data.sortOrder ?? 0 }).returning()
+  revalidatePath("/dashboard/pdfs")
+  revalidateCatalogue()
+  return resource
+}
+
+export async function updatePdfResource(id: number, data: { title?: string; description?: string | null; url?: string; resourceType?: "brochure" | "program" | "guide" | "certificate" | "other"; domainId?: number | null; subCategoryId?: number | null; formationId?: number | null; courseId?: number | null; certificationId?: number | null; isActive?: boolean; sortOrder?: number }) {
+  await db().update(dPdfResources).set(data).where(eq(dPdfResources.id, id))
+  revalidatePath("/dashboard/pdfs")
+  revalidateCatalogue()
+}
+
+export async function deletePdfResource(id: number) {
+  await db().delete(dPdfResources).where(eq(dPdfResources.id, id))
+  revalidatePath("/dashboard/pdfs")
+  revalidateCatalogue()
+}
+
+// Testimonials
+export async function createTestimonial(data: { quote: string; name: string; role?: string | null; rating?: number; isActive?: boolean; sortOrder?: number }) {
   const [t] = await db().insert(dTestimonials).values(data).returning()
   revalidatePath("/dashboard/testimonials")
   return t
 }
 
-export async function updateTestimonial(
-  id: number,
-  data: {
-    quote?: string
-    name?: string
-    role?: string | null
-    rating?: number
-    isActive?: boolean
-    sortOrder?: number
-  },
-) {
+export async function updateTestimonial(id: number, data: { quote?: string; name?: string; role?: string | null; rating?: number; isActive?: boolean; sortOrder?: number }) {
   await db().update(dTestimonials).set(data).where(eq(dTestimonials.id, id))
   revalidatePath("/dashboard/testimonials")
 }
@@ -229,22 +296,21 @@ export async function deleteTestimonial(id: number) {
   revalidatePath("/dashboard/testimonials")
 }
 
-// ── Featured courses ──
-
-export async function addFeaturedCourse(courseId: number, sortOrder?: number) {
-  const [f] = await db().insert(dFeaturedCourses).values({ courseId, sortOrder: sortOrder ?? 0 }).returning()
-  revalidatePath("/dashboard/courses")
-  return f
+// Featured formations
+export async function addFeaturedFormation(formationId: number, sortOrder?: number) {
+  const [featured] = await db().insert(dFeaturedFormations).values({ formationId, sortOrder: sortOrder ?? 0 }).returning()
+  revalidateCatalogue()
+  return featured
 }
 
-export async function removeFeaturedCourse(id: number) {
-  await db().delete(dFeaturedCourses).where(eq(dFeaturedCourses.id, id))
-  revalidatePath("/dashboard/courses")
+export async function removeFeaturedFormation(id: number) {
+  await db().delete(dFeaturedFormations).where(eq(dFeaturedFormations.id, id))
+  revalidateCatalogue()
 }
 
-export async function reorderFeaturedCourses(items: { id: number; sortOrder: number }[]) {
+export async function reorderFeaturedFormations(items: { id: number; sortOrder: number }[]) {
   for (const item of items) {
-    await db().update(dFeaturedCourses).set({ sortOrder: item.sortOrder }).where(eq(dFeaturedCourses.id, item.id))
+    await db().update(dFeaturedFormations).set({ sortOrder: item.sortOrder }).where(eq(dFeaturedFormations.id, item.id))
   }
-  revalidatePath("/dashboard/courses")
+  revalidateCatalogue()
 }

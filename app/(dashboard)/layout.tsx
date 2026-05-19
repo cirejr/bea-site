@@ -4,6 +4,21 @@ import { headers } from "next/headers"
 import { AppSidebar } from "@/components/app-sidebar"
 import { SiteHeader } from "@/components/site-header"
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
+import { Inter, Stack_Sans_Text } from "next/font/google"
+import { cn } from "@/lib/utils"
+import "../globals.css"
+
+const inter = Inter({
+  variable: "--font-inter",
+  subsets: ["latin"],
+  display: "swap",
+})
+
+const notoSerif = Stack_Sans_Text({
+  variable: "--font-noto-serif",
+  subsets: ["latin"],
+  display: "swap",
+})
 
 export default async function DashboardLayout({
   children,
@@ -15,6 +30,7 @@ export default async function DashboardLayout({
 
   return (
     <SidebarProvider
+      className={cn(inter.variable, notoSerif.variable, "font-sans")}
       style={
         {
           "--sidebar-width": "calc(var(--spacing) * 72)",

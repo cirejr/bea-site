@@ -49,7 +49,7 @@ export function NavDocuments({
                 }
               >
                 <HugeiconsIcon icon={MoreHorizontalCircle01Icon} strokeWidth={2} />
-                <span className="sr-only">More</span>
+                <span className="sr-only">Plus</span>
               </DropdownMenuTrigger>
               <DropdownMenuContent
                 className="w-24"
@@ -58,16 +58,16 @@ export function NavDocuments({
               >
                 <DropdownMenuItem>
                   <HugeiconsIcon icon={Folder01Icon} strokeWidth={2} />
-                  <span>Open</span>
+                  <span>Ouvrir</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
                   <HugeiconsIcon icon={Share01Icon} strokeWidth={2} />
-                  <span>Share</span>
+                  <span>Partager</span>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem variant="destructive">
                   <HugeiconsIcon icon={Delete02Icon} strokeWidth={2} />
-                  <span>Delete</span>
+                  <span>Supprimer</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -76,7 +76,7 @@ export function NavDocuments({
         <SidebarMenuItem>
           <SidebarMenuButton className="text-sidebar-foreground/70">
             <HugeiconsIcon icon={MoreHorizontalCircle01Icon} strokeWidth={2} className="text-sidebar-foreground/70" />
-            <span>More</span>
+            <span>Plus</span>
           </SidebarMenuButton>
         </SidebarMenuItem>
       </SidebarMenu>

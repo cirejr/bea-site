@@ -5,11 +5,12 @@ import {
   domains,
   subCategories,
   modalites,
+  formations,
   courses,
-  courseModalities,
+  formationModalities,
   certifications,
   testimonials,
-  featuredCourses,
+  featuredFormations,
 } from "./schema"
 
 
@@ -96,8 +97,8 @@ async function main() {
   console.log(`  ✓ ${insertedModalities.length} modalities`)
   const modalityMap = Object.fromEntries(insertedModalities.map((m) => [m.slug, m.id]))
 
-  // ── Courses ──
-  const courseData: {
+  // ── Formations ──
+  const formationData: {
     domainSlug: string; subCatSlug: string | null; title: string; slug: string;
     price: string; rating: string; reviewsCount: number; duration: string | null;
     badge: string | null; modalitySlugs: string[]
@@ -156,8 +157,8 @@ async function main() {
     { domainSlug: "secteurs-et-metiers", subCatSlug: "assistants", title: "Formation Organisation et productivité", slug: "secteur-organisation-productivite", price: "790 € HT", rating: "4.6/5", reviewsCount: 82, duration: "1 jour", badge: null, modalitySlugs: ["presentiel", "distance", "captation"] },
   ]
 
-  const insertedCourses = await db.insert(courses).values(
-    courseData.map((c) => ({
+  const insertedFormations = await db.insert(formations).values(
+    formationData.map((c) => ({
       domainId: domainMap[c.domainSlug],
       subCategoryId: c.subCatSlug ? subCatMap[c.subCatSlug] : null,
       title: c.title,
@@ -169,22 +170,35 @@ async function main() {
       badge: c.badge as any ?? null,
     })),
   ).returning()
-  console.log(`  ✓ ${insertedCourses.length} courses`)
+  console.log(`  ✓ ${insertedFormations.length} formations`)
 
-  // ── Course-Modality links ──
-  const courseModalityPairs: { courseId: number; modalityId: number }[] = []
-  for (let i = 0; i < courseData.length; i++) {
-    for (const modSlug of courseData[i].modalitySlugs) {
-      courseModalityPairs.push({
-        courseId: insertedCourses[i].id,
+  // ── Formation-Modality links ──
+  const formationModalityPairs: { formationId: number; modalityId: number }[] = []
+  for (let i = 0; i < formationData.length; i++) {
+    for (const modSlug of formationData[i].modalitySlugs) {
+      formationModalityPairs.push({
+        formationId: insertedFormations[i].id,
         modalityId: modalityMap[modSlug],
       })
     }
   }
-  if (courseModalityPairs.length > 0) {
-    await db.insert(courseModalities).values(courseModalityPairs)
+  if (formationModalityPairs.length > 0) {
+    await db.insert(formationModalities).values(formationModalityPairs)
   }
-  console.log(`  ✓ ${courseModalityPairs.length} course-modality links`)
+  console.log(`  ✓ ${formationModalityPairs.length} formation-modality links`)
+
+  // ── Child courses ──
+  const childCourseData = formationData.map((formation, i) => ({
+    formationId: insertedFormations[i].id,
+    title: `${formation.title} - session principale`,
+    slug: `${formation.slug}-session-principale`,
+    summary: `Cours principal pour ${formation.title}.`,
+    duration: formation.duration,
+    modality: formation.modalitySlugs[0] ?? null,
+    sortOrder: 1,
+  }))
+  const insertedCourses = await db.insert(courses).values(childCourseData).returning()
+  console.log(`  ✓ ${insertedCourses.length} child courses`)
 
   // ── Certifications ──
   const certData = [
@@ -212,7 +226,7 @@ async function main() {
   console.log(`  ✓ ${insertedTestimonials.length} testimonials`)
 
   // ── Featured courses ──
-  const courseByTitle = Object.fromEntries(insertedCourses.map((c) => [c.title, c.id]))
+  const formationByTitle = Object.fromEntries(insertedFormations.map((f) => [f.title, f.id]))
   const featuredTitles = [
     "Formation Finance pour non-financiers (niveau 1)",
     "Formation Facturation électronique : mise en œuvre et contraintes fiscales",
@@ -220,13 +234,13 @@ async function main() {
     "Formation Compliance Officer",
   ]
   const featuredData = featuredTitles.map((title, i) => ({
-    courseId: courseByTitle[title]!,
+    formationId: formationByTitle[title]!,
     sortOrder: i,
-  })).filter((f) => f.courseId)
+  })).filter((f) => f.formationId)
   if (featuredData.length > 0) {
-    await db.insert(featuredCourses).values(featuredData)
+    await db.insert(featuredFormations).values(featuredData)
   }
-  console.log(`  ✓ ${featuredData.length} featured courses`)
+  console.log(`  ✓ ${featuredData.length} featured formations`)
 
   console.log("\nSeed complete!")
 }

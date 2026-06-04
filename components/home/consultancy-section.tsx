@@ -18,13 +18,13 @@ export function BeaConsultancySection(_props: BeaConsultancySectionProps) {
   ] as const
 
   return (
-    <section className="bea-arrow-watermark bg-bea-surface-container-lowest py-32">
+    <section className="bg-bea-surface-container-lowest py-32">
       <div className="mx-auto max-w-7xl px-8">
         <div className="mb-20 text-center md:text-left">
           <h2 className="mb-4 font-bea-headline text-5xl font-extrabold text-bea-primary">
             {t("title")}
           </h2>
-          <p className="font-bea-body max-w-2xl text-lg italic text-bea-secondary">
+          <p className="max-w-2xl font-bea-body text-lg text-bea-secondary italic">
             {t("subtitle")}
           </p>
         </div>
@@ -35,7 +35,10 @@ export function BeaConsultancySection(_props: BeaConsultancySectionProps) {
               className="rounded-bea-lg bg-bea-surface-container-low p-8 transition-colors duration-500 hover:bg-bea-surface-container"
             >
               <div className="mb-8 flex h-16 w-16 items-center justify-center rounded-full bg-white shadow-sm">
-                <BeaHugeicon name={consultancyIcons[index]} className="text-3xl text-[#E5E4E2]" />
+                <BeaHugeicon
+                  name={consultancyIcons[index]}
+                  className="text-3xl text-[#E5E4E2]"
+                />
               </div>
               <h3 className="mb-4 font-bea-headline text-2xl font-bold text-bea-primary">
                 {t(item.titleKey)}

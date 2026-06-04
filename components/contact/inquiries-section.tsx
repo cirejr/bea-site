@@ -38,7 +38,7 @@ export function BeaContactInquiriesSection(
             </div>
           </Link>
           <Link
-            href={t("training.href")}
+            href={"/formations"}
             className="group flex items-start gap-6 rounded-[var(--radius-bea)] bg-bea-surface-container p-8 transition-all duration-300 hover:bg-bea-primary"
           >
             <div className="flex h-14 w-14 items-center justify-center rounded-lg bg-white/20 group-hover:bg-white/10">

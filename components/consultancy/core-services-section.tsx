@@ -5,7 +5,9 @@ import { useTranslations } from "next-intl"
 
 import { BeaHugeicon } from "@/components/home/hugeicon"
 
-export type BeaConsultancyCoreServicesSectionProps = Readonly<Record<string, never>>
+export type BeaConsultancyCoreServicesSectionProps = Readonly<
+  Record<string, never>
+>
 
 export function BeaConsultancyCoreServicesSection(
   _props: BeaConsultancyCoreServicesSectionProps
@@ -24,7 +26,7 @@ export function BeaConsultancyCoreServicesSection(
               {t("coreIntro.title")}
             </h2>
           </div>
-          <p className="font-bea-body max-w-md text-lg italic text-bea-on-surface-variant">
+          <p className="max-w-md font-bea-body text-lg text-bea-on-surface-variant italic">
             {t("coreIntro.description")}
           </p>
         </div>
@@ -57,7 +59,7 @@ export function BeaConsultancyCoreServicesSection(
             </div>
             <div className="relative aspect-[4/3] min-h-[200px] w-full min-w-0 flex-1 overflow-hidden rounded-xl">
               <Image
-                src="https://picsum.photos/seed/bea-hr/600/450"
+                src="/rh.jpg"
                 alt="HR Strategy"
                 fill
                 className="object-cover transition-transform duration-700 group-hover:scale-105"
@@ -85,7 +87,7 @@ export function BeaConsultancyCoreServicesSection(
             </div>
           </div>
           <div className="relative flex flex-col items-center gap-12 overflow-hidden rounded-bea-lg bg-bea-primary-container p-12 text-white md:col-span-12 md:flex-row">
-            <div className="absolute top-0 right-0 h-96 w-96 rotate-12 bg-white opacity-5 bea-arrow-motif" />
+            <div className="bea-arrow-motif absolute top-0 right-0 h-96 w-96 rotate-12 bg-white opacity-5" />
             <div className="z-10 md:w-3/5">
               <h3 className="mb-6 font-bea-headline text-3xl font-black md:text-5xl">
                 {t("transformBlock.title")}
@@ -96,12 +98,20 @@ export function BeaConsultancyCoreServicesSection(
             </div>
             <div className="z-10 flex flex-wrap gap-4 md:w-2/5">
               <div className="min-w-[200px] flex-1 rounded-bea-lg bg-white/10 p-6 backdrop-blur-md">
-                <span className="mb-2 block font-bea-headline text-4xl font-bold">45%</span>
-                <span className="font-bea-label text-sm opacity-80">{t("transformBlock.stats.efficiency")}</span>
+                <span className="mb-2 block font-bea-headline text-4xl font-bold">
+                  45%
+                </span>
+                <span className="font-bea-label text-sm opacity-80">
+                  {t("transformBlock.stats.efficiency")}
+                </span>
               </div>
               <div className="min-w-[200px] flex-1 rounded-bea-lg bg-white/10 p-6 backdrop-blur-md">
-                <span className="mb-2 block font-bea-headline text-4xl font-bold">98%</span>
-                <span className="font-bea-label text-sm opacity-80">{t("transformBlock.stats.retention")}</span>
+                <span className="mb-2 block font-bea-headline text-4xl font-bold">
+                  98%
+                </span>
+                <span className="font-bea-label text-sm opacity-80">
+                  {t("transformBlock.stats.retention")}
+                </span>
               </div>
             </div>
           </div>

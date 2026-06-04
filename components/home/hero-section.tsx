@@ -14,7 +14,7 @@ export function BeaHeroSection() {
     <section className="relative flex h-[921px] items-center overflow-hidden">
       <div className="absolute inset-0 z-0">
         <Image
-          src="https://picsum.photos/seed/bea-hero/1920/1080"
+          src="/strategic.jpg"
           alt="Hero"
           fill
           priority
@@ -25,26 +25,26 @@ export function BeaHeroSection() {
       </div>
       <div className="relative z-10 mx-auto w-full max-w-7xl px-8">
         <div className="max-w-3xl">
-          <h1 className="mb-4 md:mb-6 font-bea-headline text-3xl leading-tight font-black text-white md:text-5xl lg:text-6xl lg:md:text-7xl">
+          <h1 className="mb-4 font-bea-headline text-3xl leading-tight font-black text-white md:mb-6 md:text-5xl lg:text-6xl lg:md:text-7xl">
             {t("title")}
             <span className="text-bea-primary-fixed">
               {" "}
               {t("titleHighlight")}
             </span>
           </h1>
-          <p className="mb-6 md:mb-10 max-w-xl font-bea-body text-base md:text-xl text-bea-on-primary-container/80 italic">
+          <p className="mb-6 max-w-xl font-bea-body text-base text-bea-on-primary-container/80 italic md:mb-10 md:text-xl">
             {t("description")}
           </p>
-          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
-            <Link href="/training">
-              <Button className="h-auto rounded-bea-lg bg-bea-primary-container px-6 py-3 md:px-8 md:py-4 font-bea-headline text-base md:text-lg font-bold text-white hover:brightness-110">
+          <div className="flex flex-col gap-3 sm:flex-row sm:gap-4">
+            <Link href="/formations">
+              <Button className="h-auto rounded-bea-lg bg-bea-primary-container px-6 py-3 font-bea-headline text-base font-bold text-white hover:brightness-110 md:px-8 md:py-4 md:text-lg">
                 {t("ctaPrimary")}
               </Button>
             </Link>
             <Link href="/consultancy">
               <Button
                 variant="ghost"
-                className="bea-glass-panel h-auto rounded-bea-lg border border-white/20 bg-transparent px-6 py-3 md:px-8 md:py-4 font-bea-headline text-base md:text-lg font-bold text-white hover:bg-white/10"
+                className="bea-glass-panel h-auto rounded-bea-lg border border-white/20 bg-transparent px-6 py-3 font-bea-headline text-base font-bold text-white hover:bg-white/10 md:px-8 md:py-4 md:text-lg"
               >
                 {t("ctaSecondary")}
               </Button>

@@ -15,16 +15,16 @@ export function BeaAboutHeroSection(_props: BeaAboutHeroSectionProps) {
           <span className="mb-4 inline-block font-bea-headline text-xs font-bold tracking-widest text-bea-primary uppercase">
             {t("eyebrow")}
           </span>
-          <h1 className="mb-4 md:mb-8 font-bea-headline text-3xl leading-tight font-black tracking-tighter text-bea-primary md:text-5xl lg:text-7xl">
+          <h1 className="mb-4 font-bea-headline text-3xl leading-tight font-black tracking-tighter text-bea-primary md:mb-8 md:text-5xl lg:text-7xl">
             {t("title")}
           </h1>
-          <p className="max-w-lg font-bea-body text-base md:text-lg leading-relaxed italic text-bea-on-surface-variant lg:text-xl">
+          <p className="max-w-lg font-bea-body text-base leading-relaxed text-bea-on-surface-variant italic md:text-lg lg:text-xl">
             {t("description")}
           </p>
         </div>
         <div className="relative h-[500px] overflow-hidden rounded-bea-lg bg-bea-surface-container-low shadow-2xl">
           <Image
-            src="https://lh3.googleusercontent.com/aida-public/AB6AXuDwytnxJS8Z3yKUNT7vjucbeVp4xE5UConlmrTEx__jmAELgfem-G6jbM_8vX6rMSprPcqEVtphTJw9-a_REk9uhY1fVmb6c5dfxjNOVFJsmeuJnC2AxwxN6xYN3NSytOEGxJwoyM4JQHW4SdlRJ0Q_yjsxYzTvWmueiT0xTi2LruTymDoFVXvA0NX3vnpYvI3VnDKhyARSrK9EWsnonyA4CFDbZKamgKyJsgC-DXd-sZjGWklChsyfO9WFNlYyquIODZjeDdlA0g"
+            src="/about-hero.jpg"
             alt={t("title")}
             fill
             priority
@@ -35,7 +35,10 @@ export function BeaAboutHeroSection(_props: BeaAboutHeroSectionProps) {
         </div>
       </div>
       <div className="pointer-events-none absolute top-0 right-0 translate-x-1/4 -translate-y-1/4 scale-150 opacity-5">
-        <BeaHugeicon name="architecture" className="text-[400px] text-bea-primary-container" />
+        <BeaHugeicon
+          name="architecture"
+          className="text-[400px] text-bea-primary-container"
+        />
       </div>
     </section>
   )

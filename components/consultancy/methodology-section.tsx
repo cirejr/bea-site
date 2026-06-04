@@ -3,7 +3,9 @@
 import Image from "next/image"
 import { useTranslations } from "next-intl"
 
-export type BeaConsultancyMethodologySectionProps = Readonly< Record<string, never>>
+export type BeaConsultancyMethodologySectionProps = Readonly<
+  Record<string, never>
+>
 
 export function BeaConsultancyMethodologySection(
   _props: BeaConsultancyMethodologySectionProps
@@ -15,7 +17,7 @@ export function BeaConsultancyMethodologySection(
       <div className="mx-auto flex max-w-7xl flex-col items-center gap-16 md:flex-row">
         <div className="md:w-1/2">
           <Image
-            src="https://picsum.photos/seed/bea-methodology/800/600"
+            src="/architect-academic.jpg"
             alt="Academic methodology"
             width={960}
             height={720}
@@ -34,7 +36,7 @@ export function BeaConsultancyMethodologySection(
             {t("body")}
           </p>
           <div className="rounded-bea-lg border-l-4 border-bea-primary bg-bea-surface-container-lowest p-8">
-            <p className="font-bea-body text-lg italic text-bea-primary">
+            <p className="font-bea-body text-lg text-bea-primary italic">
               &ldquo;{t("quote")}&rdquo;
             </p>
             <p className="mt-4 font-bea-headline font-bold text-bea-secondary">

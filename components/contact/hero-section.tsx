@@ -9,23 +9,23 @@ export function BeaContactHeroSection(_props: BeaContactHeroSectionProps) {
   const t = useTranslations("contact.hero")
 
   return (
-    <section className="bea-arrow-watermark relative mx-auto max-w-screen-2xl overflow-hidden px-8 py-20 pt-32">
+    <section className="relative mx-auto max-w-screen-2xl overflow-hidden px-8 py-20 pt-32">
       <div className="grid gap-16 lg:grid-cols-2 lg:items-center">
         <div className="space-y-6">
           <span className="font-bea-headline text-xs font-bold tracking-widest text-bea-primary uppercase">
             {t("eyebrow")}
           </span>
-          <h1 className="font-bea-headline text-3xl md:text-4xl lg:text-7xl font-black tracking-tighter text-bea-primary">
+          <h1 className="font-bea-headline text-3xl font-black tracking-tighter text-bea-primary md:text-4xl lg:text-7xl">
             {t("title")}
           </h1>
-          <p className="max-w-md font-bea-body text-base md:text-lg leading-relaxed text-bea-secondary">
+          <p className="max-w-md font-bea-body text-base leading-relaxed text-bea-secondary md:text-lg">
             {t("subtitle")}
           </p>
         </div>
         <div className="bea-glass-panel relative overflow-hidden rounded-lg shadow-2xl">
           <div className="relative aspect-[4/3] w-full">
             <Image
-              src="https://picsum.photos/seed/bea-contact/800/600"
+              src="/contact.jpg"
               alt="Contact"
               fill
               className="object-cover"

@@ -1,0 +1,95 @@
+import { auth } from "@/lib/auth"
+import { headers } from "next/headers"
+import { redirect } from "next/navigation"
+import { getDashboardStats, getDomains, getFormations } from "@/lib/data"
+import { SectionCards } from "@/components/section-cards"
+import { DataTable } from "@/components/data-table"
+import Link from "next/link"
+import { Button } from "@/components/ui/button"
+import { HugeiconsIcon } from "@hugeicons/react"
+import { Add01Icon } from "@hugeicons/core-free-icons"
+
+export default async function DashboardPage() {
+  const session = await auth.api.getSession({ headers: await headers() })
+  if (!session) redirect("/login")
+
+  const stats = await getDashboardStats()
+  const formationList = await getFormations({ activeOnly: false })
+  const allDomains = await getDomains()
+
+  return (
+    <div className="px-4 lg:px-6">
+      <div className="mb-6 flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold">Tableau de bord</h1>
+          <p className="text-muted-foreground">
+            Bon retour, {session.user.name}
+          </p>
+        </div>
+        <Link href="/dashboard/formations/new">
+          <Button>
+            <HugeiconsIcon icon={Add01Icon} strokeWidth={2} />
+            Nouvelle formation
+          </Button>
+        </Link>
+      </div>
+
+      <SectionCards stats={stats} />
+
+      <div className="mt-6">
+        <h2 className="mb-4 text-lg font-semibold">Formations récentes</h2>
+        <div className="grid gap-3">
+          {formationList.slice(0, 5).map((formation) => (
+            <div
+              key={formation.id}
+              className="flex items-center justify-between rounded-lg border p-3"
+            >
+              <div>
+                <p className="font-medium">{formation.title}</p>
+                <p className="text-sm text-muted-foreground">
+                  {formation.domain?.label}
+                  {formation.subCategory ? ` - ${formation.subCategory.label}` : ""}
+                </p>
+              </div>
+              <div className="flex items-center gap-2">
+                {(formation.badges ?? []).length > 0 && (
+                  <div className="flex gap-1">
+                    {formation.badges!.slice(0, 2).map((badge) => (
+                      <span
+                        key={badge.id}
+                        className="rounded-full px-2 py-0.5 text-xs font-medium"
+                        style={{ backgroundColor: badge.color + "20", color: badge.color }}
+                      >
+                        {badge.name}
+                      </span>
+                    ))}
+                  </div>
+                )}
+                <Link
+                  href={`/dashboard/formations/${formation.id}`}
+                  className="text-sm text-muted-foreground underline hover:text-foreground"
+                >
+                  Modifier
+                </Link>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="mt-8">
+        <h2 className="mb-4 text-lg font-semibold">Domaines</h2>
+        <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
+          {allDomains.map((d) => (
+            <div key={d.id} className="rounded-lg border p-3 text-center">
+              <p className="font-medium">{d.label}</p>
+              <p className="text-xs text-muted-foreground">
+                /training/{d.slug}
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}

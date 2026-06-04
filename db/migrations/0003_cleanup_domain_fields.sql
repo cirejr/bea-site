@@ -1,0 +1,3 @@
+ALTER TABLE domains DROP COLUMN IF EXISTS "iconName";
+ALTER TABLE domains DROP COLUMN IF EXISTS "sortOrder";
+ALTER TABLE sub_categories DROP COLUMN IF EXISTS "sortOrder";

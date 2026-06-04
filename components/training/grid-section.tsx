@@ -1,197 +1,241 @@
 "use client"
 
-import { useState } from "react"
-import { useTranslations } from "next-intl"
-import { BeaHugeicon } from "@/components/home/hugeicon"
+import { useMemo, useState } from "react"
+import { Search, X } from "lucide-react"
+import { CourseCard, type CourseCardData } from "./course-card"
+import { Input } from "@/components/ui/input"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import type {
+  Domain,
+  FormationWithRelations,
+  Modality,
+  SubCategory,
+} from "@/lib/data"
 
-type ProgramType = "certification" | "short-course"
-type Level = "beginner" | "intermediate" | "advanced"
-
-interface TrainingProgram {
-  id: string
-  icon: string
-  progress: number
-  category: string
-  type: ProgramType
-  level: Level
+type BeaTrainingGridSectionProps = {
+  activeDomain: string | null
+  activeSubCategory?: string | null
+  formations?: FormationWithRelations[]
+  domains?: Domain[]
+  subCategories?: SubCategory[]
+  modalities?: Modality[]
 }
 
-const trainingPrograms: TrainingProgram[] = [
-  { id: "finance", icon: "account_balance_wallet", progress: 85, category: "finance", type: "certification", level: "intermediate" },
-  { id: "hr", icon: "badge", progress: 42, category: "hr", type: "certification", level: "intermediate" },
-  { id: "ngo", icon: "diversity_3", progress: 12, category: "ngo", type: "certification", level: "beginner" },
-  { id: "entrepreneur", icon: "rocket_launch", progress: 0, category: "entrepreneurship", type: "certification", level: "advanced" },
-  { id: "management", icon: "leaderboard", progress: 67, category: "management", type: "short-course", level: "advanced" },
-  { id: "legal", icon: "gavel", progress: 25, category: "legal", type: "short-course", level: "intermediate" },
-]
+export function BeaTrainingGridSection({
+  activeDomain,
+  activeSubCategory = null,
+  formations = [],
+  domains = [],
+  subCategories = [],
+  modalities = [],
+}: BeaTrainingGridSectionProps) {
+  const [selectedDomain, setSelectedDomain] = useState<string | null>(
+    activeDomain
+  )
+  const [selectedSub, setSelectedSub] = useState<string | null>(
+    activeSubCategory
+  )
+  const [selectedModality, setSelectedModality] = useState<string>("all")
+  const [searchQuery, setSearchQuery] = useState("")
 
-export type BeaTrainingGridSectionProps = {
-  activeCategory: string | null
-}
+  const visibleSubCategories = useMemo(() => {
+    if (!selectedDomain) return subCategories
+    const domain = domains.find((item) => item.slug === selectedDomain)
+    return domain
+      ? subCategories.filter((item) => item.domainId === domain.id)
+      : []
+  }, [domains, selectedDomain, subCategories])
 
-export function BeaTrainingGridSection({ activeCategory }: BeaTrainingGridSectionProps) {
-  const tf = useTranslations("training.filters")
-  const tp = useTranslations("training.programs")
+  const results = useMemo(() => {
+    const query = searchQuery.trim().toLowerCase()
+    return formations.filter((formation) => {
+      if (selectedDomain && formation.domain.slug !== selectedDomain)
+        return false
+      if (selectedSub && formation.subCategory?.slug !== selectedSub)
+        return false
+      if (
+        selectedModality !== "all" &&
+        !formation.modalities.some((item) => item.slug === selectedModality)
+      )
+        return false
+      if (
+        query &&
+        !formation.title.toLowerCase().includes(query) &&
+        !(formation.summary ?? "").toLowerCase().includes(query)
+      )
+        return false
+      return true
+    })
+  }, [formations, searchQuery, selectedDomain, selectedModality, selectedSub])
 
-  const [activeTab, setActiveTab] = useState<"all" | "certification" | "short-course">("all")
-  const [showLevelDropdown, setShowLevelDropdown] = useState(false)
-  const [showSortDropdown, setShowSortDropdown] = useState(false)
-  const [selectedLevel, setSelectedLevel] = useState<Level | null>(null)
-  const [sortBy, setSortBy] = useState<"relevance" | "progress-asc" | "progress-desc" | "name">("relevance")
-
-  const filteredPrograms = trainingPrograms.filter((program) => {
-    const matchesCategory = !activeCategory || program.category === activeCategory
-    const matchesTab = activeTab === "all" || program.type === activeTab
-    const matchesLevel = !selectedLevel || program.level === selectedLevel
-    return matchesCategory && matchesTab && matchesLevel
-  })
-
-  const sortedPrograms = [...filteredPrograms].sort((a, b) => {
-    switch (sortBy) {
-      case "progress-desc":
-        return b.progress - a.progress
-      case "progress-asc":
-        return a.progress - b.progress
-      case "name":
-        return tp(`${a.id}.title`).localeCompare(tp(`${b.id}.title`))
-      default:
-        return 0
-    }
-  })
-
-  const tabs = [
-    { id: "all" as const, label: tf("all") },
-    { id: "certification" as const, label: tf("certifications") },
-    { id: "short-course" as const, label: tf("shortCourses") },
-  ]
-
-  const levels: { id: Level; label: string }[] = [
-    { id: "beginner", label: "Beginner" },
-    { id: "intermediate", label: "Intermediate" },
-    { id: "advanced", label: "Advanced" },
-  ]
-
-  const sortOptions: { id: typeof sortBy; label: string }[] = [
-    { id: "relevance", label: tf("sortRelevance") },
-    { id: "progress-desc", label: "Progress: High to Low" },
-    { id: "progress-asc", label: "Progress: Low to High" },
-    { id: "name", label: "Name: A to Z" },
-  ]
+  const hasActiveFilters =
+    selectedDomain !== activeDomain ||
+    selectedSub !== null ||
+    selectedModality !== "all" ||
+    searchQuery !== ""
+  const clearFilters = () => {
+    setSelectedDomain(activeDomain)
+    setSelectedSub(null)
+    setSelectedModality("all")
+    setSearchQuery("")
+  }
 
   return (
     <>
-      <section className="mb-12 flex flex-col md:flex-row gap-4 items-end justify-between">
-        <div className="w-full md:w-auto flex flex-col gap-2">
-          <label className="font-bea-label text-xs font-bold text-secondary uppercase tracking-widest ml-1">
-            Refine Catalog
-          </label>
-          <div className="flex gap-2">
-            <div className="bg-bea-surface-container-low p-1 rounded-full flex gap-1">
-              {tabs.map((tab) => (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id)}
-                  className={`px-6 py-2 rounded-full font-bea-headline font-bold text-xs transition-colors ${
-                    activeTab === tab.id
-                      ? "bg-bea-surface-container-lowest text-bea-primary shadow-sm"
-                      : "text-bea-on-surface-variant hover:bg-bea-surface-container-high"
-                  }`}
-                >
-                  {tab.label}
-                </button>
-              ))}
-            </div>
+      <section className="mx-auto mb-8 flex max-w-7xl flex-col gap-5">
+        <div className="relative max-w-md rounded-2xl">
+          <Search className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2" />
+          <Input
+            placeholder="Rechercher une formation..."
+            value={searchQuery}
+            onChange={(event) => setSearchQuery(event.target.value)}
+            className="border-bea-outline-variant bg-white pl-9"
+          />
+        </div>
+
+        <div className="flex flex-wrap items-end gap-4">
+          <div className="flex flex-col gap-1.5">
+            <label className="text-xs font-bold tracking-widest text-bea-on-surface-variant uppercase">
+              Domaine
+            </label>
+            <Select
+              value={selectedDomain ?? "all"}
+              onValueChange={(value) => {
+                setSelectedDomain(value === "all" ? null : value)
+                setSelectedSub(null)
+              }}
+            >
+              <SelectTrigger className="min-w-[200px] border-bea-outline-variant bg-white">
+                <SelectValue placeholder="Tous les domaines" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Tous les domaines</SelectItem>
+                {domains.map((domain) => (
+                  <SelectItem key={domain.id} value={domain.slug}>
+                    {domain.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="flex flex-col gap-1.5">
+            <label className="text-xs font-bold tracking-widest text-bea-on-surface-variant uppercase">
+              Sous-catégorie
+            </label>
+            <Select
+              value={selectedSub ?? "all"}
+              onValueChange={(value) =>
+                setSelectedSub(value === "all" ? null : value)
+              }
+            >
+              <SelectTrigger className="min-w-[220px] border-bea-outline-variant bg-white">
+                <SelectValue placeholder="Toutes les sous-catégories" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Toutes les sous-catégories</SelectItem>
+                {visibleSubCategories.map((subCategory) => (
+                  <SelectItem key={subCategory.id} value={subCategory.slug}>
+                    {subCategory.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="flex flex-col gap-1.5 rounded-2xl border border-bea-primary/15 bg-bea-primary/5 px-3 py-2">
+            <label className="text-xs font-bold tracking-widest text-bea-primary uppercase">
+              Modalité
+            </label>
+            <Select
+              value={selectedModality}
+              onValueChange={(value) => setSelectedModality(value ?? "all")}
+            >
+              <SelectTrigger className="min-w-[200px] border-bea-outline-variant bg-white">
+                <SelectValue placeholder="Toutes les modalités" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Toutes les modalités</SelectItem>
+                {modalities.map((modality) => (
+                  <SelectItem key={modality.id} value={modality.slug}>
+                    {modality.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
         </div>
-        <div className="flex gap-3 relative">
-          <div className="relative">
+
+        {selectedModality !== "all" && (
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="text-xs text-bea-on-surface-variant">
+              Filtrer par modalité :
+            </span>
             <button
-              onClick={() => setShowLevelDropdown(!showLevelDropdown)}
-              className="bg-bea-surface-container-low rounded-xl px-4 py-2 flex items-center gap-2 text-secondary cursor-pointer hover:bg-bea-surface-container-high transition-colors"
+              type="button"
+              onClick={() => setSelectedModality("all")}
+              className="inline-flex items-center gap-1.5 rounded-full bg-bea-primary px-3 py-1 text-xs font-semibold text-white transition-colors hover:bg-bea-primary/90"
             >
-              <BeaHugeicon name="filter_list" className="text-sm" />
-              <span className="text-xs font-bea-headline font-semibold">
-                {selectedLevel ? levels.find(l => l.id === selectedLevel)?.label : tf("filterLevel")}
-              </span>
+              {modalities.find((m) => m.slug === selectedModality)?.label ??
+                selectedModality}
+              <X className="h-3 w-3" />
             </button>
-            {showLevelDropdown && (
-              <div className="absolute right-0 top-full mt-2 w-40 bg-white rounded-xl shadow-lg border border-bea-surface-container overflow-hidden z-10">
-                <button
-                  onClick={() => { setSelectedLevel(null); setShowLevelDropdown(false) }}
-                  className="w-full px-4 py-2 text-left text-xs hover:bg-bea-surface-container text-bea-secondary"
-                >
-                  All Levels
-                </button>
-                {levels.map((level) => (
-                  <button
-                    key={level.id}
-                    onClick={() => { setSelectedLevel(level.id); setShowLevelDropdown(false) }}
-                    className="w-full px-4 py-2 text-left text-xs hover:bg-bea-surface-container text-bea-secondary"
-                  >
-                    {level.label}
-                  </button>
-                ))}
-              </div>
-            )}
           </div>
-          <div className="relative">
-            <button
-              onClick={() => setShowSortDropdown(!showSortDropdown)}
-              className="bg-bea-surface-container-low rounded-xl px-4 py-2 flex items-center gap-2 text-secondary cursor-pointer hover:bg-bea-surface-container-high transition-colors"
-            >
-              <BeaHugeicon name="sort" className="text-sm" />
-              <span className="text-xs font-bea-headline font-semibold">{tf("sortRelevance")}</span>
-            </button>
-            {showSortDropdown && (
-              <div className="absolute right-0 top-full mt-2 w-48 bg-white rounded-xl shadow-lg border border-bea-surface-container overflow-hidden z-10">
-                {sortOptions.map((option) => (
-                  <button
-                    key={option.id}
-                    onClick={() => { setSortBy(option.id); setShowSortDropdown(false) }}
-                    className="w-full px-4 py-2 text-left text-xs hover:bg-bea-surface-container text-bea-secondary"
-                  >
-                    {option.label}
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
-        </div>
-      </section>
-      {sortedPrograms.length === 0 ? (
-        <div className="text-center py-12">
-          <p className="text-bea-secondary font-bea-body">No programs match your filters.</p>
+        )}
+
+        {hasActiveFilters && (
           <button
-            onClick={() => { setActiveTab("all"); setSelectedLevel(null) }}
-            className="mt-4 text-bea-primary font-bea-headline font-bold text-sm hover:underline"
+            onClick={clearFilters}
+            className="self-start text-xs font-semibold text-bea-primary hover:underline"
           >
-            Clear filters
+            Effacer tous les filtres
+          </button>
+        )}
+      </section>
+
+      <p className="mb-4 text-sm text-bea-on-surface-variant">
+        {results.length} formation{results.length !== 1 ? "s" : ""} trouvée
+        {results.length !== 1 ? "s" : ""}
+      </p>
+
+      {results.length === 0 ? (
+        <div className="py-12 text-center">
+          <p className="font-bea-body text-sm text-bea-on-surface-variant">
+            Aucune formation ne correspond à vos critères.
+          </p>
+          <button
+            onClick={clearFilters}
+            className="mt-4 text-sm font-semibold text-bea-primary hover:underline"
+          >
+            Effacer les filtres
           </button>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {sortedPrograms.map((program) => (
-            <article
-              key={program.id}
-              className="bg-bea-surface-container-lowest rounded-lg p-8 shadow-soft flex flex-col h-full hover:translate-y-[-4px] transition-transform group cursor-pointer"
-            >
-              <div className="w-14 h-14 bg-bea-surface-container rounded-2xl flex items-center justify-center mb-6 text-bea-primary group-hover:bg-bea-primary group-hover:text-white transition-all duration-300">
-                <BeaHugeicon
-                  name={program.icon as "account_balance_wallet" | "badge" | "diversity_3" | "rocket_launch" | "leaderboard" | "gavel"}
-                  className="text-3xl"
-                />
-              </div>
-              <span className="font-bea-label text-[10px] font-extrabold text-secondary tracking-[0.2em] uppercase mb-2">
-                {tp(`${program.id}.category`)}
-              </span>
-              <h3 className="text-2xl font-bold text-bea-on-surface font-bea-headline mb-3 leading-tight">
-                {tp(`${program.id}.title`)}
-              </h3>
-              <p className="text-bea-on-surface-variant font-bea-body text-sm mb-8 flex-1 leading-relaxed">
-                {tp(`${program.id}.description`)}
-              </p>
-            </article>
-          ))}
+        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+          {results.map((formation) => {
+            const price = formation.priceVisible
+              ? formation.salePrice || formation.price || "Sur demande"
+              : "Sur demande"
+            const cardData: CourseCardData = {
+              title: formation.title,
+              price,
+              rating: formation.rating ?? "-",
+              reviews: formation.reviewsCount ?? 0,
+              duration: formation.duration ?? undefined,
+              modalities: formation.modalities.map((item) => item.label),
+              badge: (formation.badges ?? [])[0]?.name ?? undefined,
+              domain: formation.domain.label,
+              href: `/formations/${formation.slug}`,
+              registerHref: formation.href ?? "/contact",
+            }
+            return <CourseCard key={formation.id} course={cardData} />
+          })}
         </div>
       )}
     </>

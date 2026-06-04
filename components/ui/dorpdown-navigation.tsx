@@ -1,42 +1,42 @@
-import { useState } from "react";
-import React from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { ChevronDown } from "lucide-react";
-import { Link } from "@/i18n/navigation";
+import { useState } from "react"
+import React from "react"
+import { motion, AnimatePresence } from "framer-motion"
+import { ChevronDown } from "lucide-react"
+import { Link } from "@/i18n/navigation"
 
 type Item = {
-  label: string;
-  description?: string;
-  icon?: React.ElementType;
-  href?: string;
-};
+  label: string
+  description?: string
+  icon?: React.ElementType
+  href?: string
+}
 
 type SubMenu = {
-  title: string;
-  href?: string;
-  items: Item[];
-  isFocused?:boolean
-};
+  title: string
+  href?: string
+  items: Item[]
+  isFocused?: boolean
+}
 
 type NavItem = {
-  id: number;
-  label: string;
-  subMenus?: SubMenu[];
-  link?: string;
-};
+  id: number
+  label: string
+  subMenus?: SubMenu[]
+  link?: string
+}
 
 type Props = {
-  navItems: NavItem[];
-  className?: string;
-};
+  navItems: NavItem[]
+  className?: string
+}
 
 export function DropdownNavigation({ navItems, className = "" }: Props) {
-  const [openMenu, setOpenMenu] = React.useState<string | null>(null);
-  const [isHover, setIsHover] = useState<number | null>(null);
+  const [openMenu, setOpenMenu] = React.useState<string | null>(null)
+  const [isHover, setIsHover] = useState<number | null>(null)
 
   const handleHover = (menuLabel: string | null) => {
-    setOpenMenu(menuLabel);
-  };
+    setOpenMenu(menuLabel)
+  }
 
   return (
     <ul className={`relative flex items-center gap-1 ${className} font-sans`}>
@@ -63,15 +63,15 @@ export function DropdownNavigation({ navItems, className = "" }: Props) {
                 {(isHover === navItem.id || openMenu === navItem.label) && (
                   <motion.div
                     layoutId="hover-bg"
-                    className="absolute inset-0 size-full rounded-full bg-bea-primary/10"
+                    className="absolute inset-0 size-full rounded-full"
                   />
                 )}
               </button>
               <AnimatePresence>
                 {openMenu === navItem.label && (
-                  <div className="absolute left-0 top-full pt-2">
+                  <div className="absolute top-full left-0 pt-2">
                     <motion.div
-                      className="w-max rounded-2xl border border-border bg-foreground p-4 shadow-lg"
+                      className="w-max rounded-2xl border border-bea-outline-variant bg-bea-surface p-4 shadow-lg"
                       layoutId="menu"
                     >
                       <div
@@ -79,10 +79,14 @@ export function DropdownNavigation({ navItems, className = "" }: Props) {
                         style={{ maxWidth: "880px" }}
                       >
                         {navItem.subMenus.map((sub) => (
-                          <motion.div layout key={sub.title} className={`${sub.isFocused && "bg-accent rounded-sm"} w-48 p-2`}>
+                          <motion.div
+                            layout
+                            key={sub.title}
+                            className={`${sub.isFocused && "rounded-sm bg-bea-surface-dim"} w-48 p-2`}
+                          >
                             <Link
                               href={sub.href || "#"}
-                              className={`${sub.isFocused && "text-bea-background hover:text-bea-inverse-primary"} mb-3 block text-sm font-medium capitalize hover:text-background`}
+                              className={`${sub.isFocused && "text-bea-background hover:text-bea-primary"} mb-3 block text-sm font-medium capitalize hover:text-bea-primary`}
                             >
                               {sub.title}
                             </Link>
@@ -91,10 +95,10 @@ export function DropdownNavigation({ navItems, className = "" }: Props) {
                                 <li key={item.label}>
                                   <Link
                                     href={item.href || "#"}
-                                    className={`${sub.isFocused && "text-bea-outline hover:bg-bea-inverse-primary" } group flex items-start space-x-3 rounded-lg p-1.5 transition-colors duration-200 hover:bg-bea-primary hover:text-white text-muted-foreground`}
+                                    className={`${sub.isFocused && "text-bea-outline hover:bg-bea-inverse-primary"} group flex items-start space-x-3 rounded-lg p-1.5 text-bea-on-surface-variant transition-colors duration-200 hover:bg-bea-primary hover:text-white`}
                                   >
                                     {item.icon && (
-                                      <div className="flex size-8 shrink-0 items-center justify-center rounded-md border border-border transition-colors duration-300 group-hover:bg-accent group-hover:text-accent-foreground">
+                                      <div                                       className="flex size-8 shrink-0 items-center justify-center rounded-md border border-bea-outline-variant transition-colors duration-300 group-hover:bg-bea-primary/10 group-hover:text-bea-primary">
                                         <item.icon className="h-4 w-4 flex-none" />
                                       </div>
                                     )}
@@ -115,7 +119,6 @@ export function DropdownNavigation({ navItems, className = "" }: Props) {
                           </motion.div>
                         ))}
                       </div>
-
                     </motion.div>
                   </div>
                 )}
@@ -124,7 +127,7 @@ export function DropdownNavigation({ navItems, className = "" }: Props) {
           ) : (
             <Link
               href={navItem.link || "#"}
-              className="relative inline-flex cursor-pointer items-center hover:bg-bea-primary/10 rounded-full px-4 py-1.5 text-sm font-medium text-bea-secondary transition-colors duration-300 hover:text-bea-primary"
+              className="relative inline-flex cursor-pointer items-center rounded-full px-4 py-1.5 text-sm font-medium text-bea-secondary transition-colors duration-300 hover:bg-bea-primary/10 hover:text-bea-primary"
             >
               {navItem.label}
             </Link>
@@ -132,5 +135,5 @@ export function DropdownNavigation({ navItems, className = "" }: Props) {
         </li>
       ))}
     </ul>
-  );
+  )
 }

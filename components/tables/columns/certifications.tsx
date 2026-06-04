@@ -1,5 +1,6 @@
 "use client"
 
+import { DeleteConfirmDialog } from "@/components/delete-confirm-dialog"
 import { Delete01Icon } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon } from "@hugeicons/react"
 import { createColumnHelper } from "@tanstack/react-table"
@@ -36,11 +37,11 @@ export const certificationsColumns = [
     header: "Actions",
     cell: ({ row }) => (
       <div className="flex justify-end">
-        <form action={deleteCertification.bind(null, row.original.id)}>
+        <DeleteConfirmDialog action={deleteCertification.bind(null, row.original.id)} entityLabel="cette certification">
           <Button variant="ghost" size="icon" className="size-8 text-destructive">
             <HugeiconsIcon icon={Delete01Icon} strokeWidth={2} className="size-4" />
           </Button>
-        </form>
+        </DeleteConfirmDialog>
       </div>
     ),
   }),

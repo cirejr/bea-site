@@ -15,7 +15,7 @@ export function BeaLeadershipSection(_props: BeaLeadershipSectionProps) {
       <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-16 px-8 lg:grid-cols-2">
         <div className="order-2 lg:order-1">
           <Image
-            src="https://picsum.photos/seed/bea-leadership/1200/800"
+            src="/mentor-leadership.jpg"
             alt="Leadership team collaboration"
             width={1200}
             height={800}
@@ -30,7 +30,10 @@ export function BeaLeadershipSection(_props: BeaLeadershipSectionProps) {
           <div className="space-y-12">
             <div className="flex gap-6">
               <div className="shrink-0">
-                <BeaHugeicon name="person_pin" className="text-4xl text-bea-primary" />
+                <BeaHugeicon
+                  name="person_pin"
+                  className="text-4xl text-bea-primary"
+                />
               </div>
               <div>
                 <h4 className="mb-2 font-bea-headline text-xl font-bold text-bea-primary">
@@ -43,7 +46,10 @@ export function BeaLeadershipSection(_props: BeaLeadershipSectionProps) {
             </div>
             <div className="flex gap-6">
               <div className="shrink-0">
-                <BeaHugeicon name="diversity_3" className="text-4xl text-bea-primary" />
+                <BeaHugeicon
+                  name="diversity_3"
+                  className="text-4xl text-bea-primary"
+                />
               </div>
               <div>
                 <h4 className="mb-2 font-bea-headline text-xl font-bold text-bea-primary">

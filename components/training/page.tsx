@@ -1,6 +1,11 @@
 import { BeaTrainingGridSection } from "./grid-section"
 import { BeaTrainingHeroSection } from "./hero-section"
-import type { Domain, FormationWithRelations, Modality, SubCategory } from "@/lib/data"
+import type {
+  Domain,
+  FormationWithRelations,
+  Modality,
+  SubCategory,
+} from "@/lib/data"
 
 export function BeaTrainingPage({
   formations,
@@ -17,7 +22,13 @@ export function BeaTrainingPage({
     <div className="min-h-screen pt-20">
       <div className="mx-auto max-w-7xl px-4 py-10 md:px-8 md:py-16">
         <BeaTrainingHeroSection />
-        <BeaTrainingGridSection activeDomain={null} formations={formations} domains={domains} subCategories={subCategories} modalities={modalities} />
+        <BeaTrainingGridSection
+          activeDomain={null}
+          formations={formations}
+          domains={domains}
+          subCategories={subCategories}
+          modalities={modalities}
+        />
       </div>
     </div>
   )

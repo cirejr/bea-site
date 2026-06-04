@@ -2,7 +2,7 @@ import type { Metadata } from "next"
 import { setRequestLocale } from "next-intl/server"
 
 import { BeaAboutPage } from "@/components/about/page"
-import { routing } from "@/lib/routing"
+import { routing } from "@/i18n/routing"
 
 export const metadata: Metadata = {
   title: "About | BOSSE ELANPRO AFRIQUE (B.E.A.)",

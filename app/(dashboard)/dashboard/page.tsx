@@ -52,10 +52,18 @@ export default async function DashboardPage() {
                 </p>
               </div>
               <div className="flex items-center gap-2">
-                {formation.badge && (
-                  <span className="rounded-full bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary">
-                    {formation.badge}
-                  </span>
+                {(formation.badges ?? []).length > 0 && (
+                  <div className="flex gap-1">
+                    {formation.badges!.slice(0, 2).map((badge) => (
+                      <span
+                        key={badge.id}
+                        className="rounded-full px-2 py-0.5 text-xs font-medium"
+                        style={{ backgroundColor: badge.color + "20", color: badge.color }}
+                      >
+                        {badge.name}
+                      </span>
+                    ))}
+                  </div>
                 )}
                 <Link
                   href={`/dashboard/formations/${formation.id}`}

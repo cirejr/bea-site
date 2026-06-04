@@ -23,7 +23,11 @@ export function LocaleSwitcher() {
   }
 
   return (
-    <Select value={locale} onValueChange={handleLocaleChange}>
+    <Select
+      value={locale}
+      onValueChange={handleLocaleChange}
+      items={{ en: "English 🇺🇸", fr: "Français 🇫🇷" }}
+    >
       <SelectTrigger className="font-bea-headline text-sm font-semibold uppercase tracking-wider  border-none hover:text-bea-primary focus:ring-0 w-min">
         <SelectValue />
       </SelectTrigger>

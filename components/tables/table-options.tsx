@@ -31,6 +31,7 @@ export function TableOptions<TData>({ columns, data }: DataTableProps<TData>) {
     pageIndex: 0,
     pageSize: 10,
   })
+  const [globalFilter, setGlobalFilter] = React.useState("")
 
   const table = useReactTable<TData>({
     data,
@@ -41,6 +42,7 @@ export function TableOptions<TData>({ columns, data }: DataTableProps<TData>) {
       rowSelection,
       columnFilters,
       pagination,
+      globalFilter,
     },
     getRowId: (row: TData) => (row as { id: string | number }).id.toString(),
     enableRowSelection: true,
@@ -49,6 +51,7 @@ export function TableOptions<TData>({ columns, data }: DataTableProps<TData>) {
     onColumnFiltersChange: setColumnFilters,
     onColumnVisibilityChange: setColumnVisibility,
     onPaginationChange: setPagination,
+    onGlobalFilterChange: setGlobalFilter,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),

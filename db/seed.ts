@@ -1,87 +1,132 @@
 import { getDb } from "./index"
+import { slugify } from "@/lib/utils"
 
 const db = getDb()
+import { sql } from "drizzle-orm"
 import {
   domains,
   subCategories,
   modalites,
   formations,
-  courses,
   formationModalities,
   certifications,
+  formationCertifications,
   testimonials,
   featuredFormations,
+  badges,
+  formationBadges,
 } from "./schema"
 
+const SEQUENTIAL_ORDER = [
+  "formation_badges",
+  "formation_certifications",
+  "formation_modalities",
+  "formations_complementaires",
+  "avis",
+  "faqs",
+  "pdf_resources",
+  "featured_formations",
+  "formations",
+  "sub_categories",
+  "certifications",
+  "testimonials",
+  "badges",
+  "modalites",
+  "domains",
+]
+
+async function clean() {
+  for (const table of SEQUENTIAL_ORDER) {
+    await db.execute(sql.raw(`DELETE FROM "${table}"`))
+    console.log(`  cleaned: ${table}`)
+  }
+}
 
 async function main() {
   console.log("Seeding database...")
 
+  console.log("Cleaning existing data...")
+  await clean()
+
+  // ── Badges ──
+  const badgeData = [
+    { name: "Nouveauté", slug: slugify("Nouveauté"), color: "#3b82f6" },
+    { name: "Incontournable", slug: slugify("Incontournable"), color: "#8b5cf6" },
+    { name: "Certifiant", slug: slugify("Certifiant"), color: "#22c55e" },
+    { name: "Parcours", slug: slugify("Parcours"), color: "#f59e0b" },
+    { name: "Classes Virtuelles", slug: slugify("Classes Virtuelles"), color: "#06b6d4" },
+    { name: "Offre BEA", slug: slugify("Offre BEA"), color: "#ec4899" },
+    { name: "Recherche", slug: slugify("Recherche"), color: "#6366f1" },
+  ]
+  const insertedBadges = await db.insert(badges).values(badgeData).returning()
+  console.log(`  ✓ ${insertedBadges.length} badges`)
+  const badgeMap = Object.fromEntries(insertedBadges.map((b) => [b.name, b.id]))
+
   // ── Domains ──
   const domainData = [
-    { slug: "chiffre", label: "Chiffre", iconName: "calculator", sortOrder: 1 },
-    { slug: "gestion-rh", label: "Gestion RH", iconName: "users", sortOrder: 2 },
-    { slug: "qse", label: "QSE", iconName: "shield", sortOrder: 3 },
-    { slug: "droit", label: "Droit", iconName: "scale", sortOrder: 4 },
-    { slug: "soft-skills", label: "Soft Skills", iconName: "sparkles", sortOrder: 5 },
-    { slug: "technologies-numeriques", label: "Technologies Numériques", iconName: "monitor", sortOrder: 6 },
-    { slug: "secteurs-et-metiers", label: "Secteurs & Métiers", iconName: "building", sortOrder: 7 },
+    { slug: "chiffre", label: "Chiffre" },
+    { slug: "gestion-rh", label: "Gestion RH" },
+    { slug: "qse", label: "QSE" },
+    { slug: "droit", label: "Droit" },
+    { slug: "soft-skills", label: "Soft Skills" },
+    { slug: "technologies-numeriques", label: "Technologies Numériques" },
+    { slug: "secteurs-et-metiers", label: "Secteurs & Métiers" },
   ]
   const insertedDomains = await db.insert(domains).values(domainData).returning()
   console.log(`  ✓ ${insertedDomains.length} domains`)
   const domainMap = Object.fromEntries(insertedDomains.map((d) => [d.slug, d.id]))
 
   // ── Sub-categories ──
-  const subCatData: { slug: string; label: string; domainSlug: string; sortOrder: number }[] = [
+  const subCatData: { slug: string; label: string; domainSlug: string }[] = [
     // Chiffre
-    { slug: "consolidation-ifrs", label: "Consolidation - Normes IFRS", domainSlug: "chiffre", sortOrder: 1 },
-    { slug: "gestion-finance", label: "Gestion - Finance", domainSlug: "chiffre", sortOrder: 2 },
-    { slug: "comptabilite", label: "Comptabilité", domainSlug: "chiffre", sortOrder: 3 },
+    { slug: "consolidation-ifrs", label: "Consolidation - Normes IFRS", domainSlug: "chiffre" },
+    { slug: "gestion-finance", label: "Gestion - Finance", domainSlug: "chiffre" },
+    { slug: "comptabilite", label: "Comptabilité", domainSlug: "chiffre" },
     // Gestion RH
-    { slug: "droit-social", label: "Droit social", domainSlug: "gestion-rh", sortOrder: 1 },
-    { slug: "relations-sociales", label: "Relations sociales", domainSlug: "gestion-rh", sortOrder: 2 },
-    { slug: "ressources-humaines", label: "Ressources Humaines", domainSlug: "gestion-rh", sortOrder: 3 },
-    { slug: "gestion-formation", label: "Gestion de la formation", domainSlug: "gestion-rh", sortOrder: 4 },
-    { slug: "paie", label: "Paie", domainSlug: "gestion-rh", sortOrder: 5 },
-    { slug: "cse", label: "CSE", domainSlug: "gestion-rh", sortOrder: 6 },
+    { slug: "droit-social", label: "Droit social", domainSlug: "gestion-rh" },
+    { slug: "relations-sociales", label: "Relations sociales", domainSlug: "gestion-rh" },
+    { slug: "ressources-humaines", label: "Ressources Humaines", domainSlug: "gestion-rh" },
+    { slug: "gestion-formation", label: "Gestion de la formation", domainSlug: "gestion-rh" },
+    { slug: "paie", label: "Paie", domainSlug: "gestion-rh" },
+    { slug: "cse", label: "CSE", domainSlug: "gestion-rh" },
     // QSE
-    { slug: "qualite", label: "Qualité", domainSlug: "qse", sortOrder: 1 },
-    { slug: "sante-securite", label: "Santé – Sécurité", domainSlug: "qse", sortOrder: 2 },
-    { slug: "environnement", label: "Environnement", domainSlug: "qse", sortOrder: 3 },
-    { slug: "qvt", label: "QVT – Qualité de Vie au Travail", domainSlug: "qse", sortOrder: 4 },
-    { slug: "rse", label: "RSE – Développement durable", domainSlug: "qse", sortOrder: 5 },
+    { slug: "qualite", label: "Qualité", domainSlug: "qse" },
+    { slug: "sante-securite", label: "Santé – Sécurité", domainSlug: "qse" },
+    { slug: "environnement", label: "Environnement", domainSlug: "qse" },
+    { slug: "qvt", label: "QVT – Qualité de Vie au Travail", domainSlug: "qse" },
+    { slug: "rse", label: "RSE – Développement durable", domainSlug: "qse" },
     // Droit
-    { slug: "compliance", label: "Compliance, audit et risques", domainSlug: "droit", sortOrder: 1 },
-    { slug: "droit-affaires", label: "Droit des affaires", domainSlug: "droit", sortOrder: 2 },
-    { slug: "droit-particuliers", label: "Droit des particuliers", domainSlug: "droit", sortOrder: 3 },
-    { slug: "droit-fiscal", label: "Droit fiscal", domainSlug: "droit", sortOrder: 4 },
-    { slug: "contentieux", label: "Contentieux – Procédures", domainSlug: "droit", sortOrder: 5 },
-    { slug: "competences-transverses", label: "Compétences transverses", domainSlug: "droit", sortOrder: 6 },
-    { slug: "droit-immobilier", label: "Droit immobilier", domainSlug: "droit", sortOrder: 7 },
-    { slug: "urbanisme-construction", label: "Droit de l'urbanisme et de la construction", domainSlug: "droit", sortOrder: 8 },
+    { slug: "compliance", label: "Compliance, audit et risques", domainSlug: "droit" },
+    { slug: "droit-affaires", label: "Droit des affaires", domainSlug: "droit" },
+    { slug: "droit-particuliers", label: "Droit des particuliers", domainSlug: "droit" },
+    { slug: "droit-fiscal", label: "Droit fiscal", domainSlug: "droit" },
+    { slug: "contentieux", label: "Contentieux – Procédures", domainSlug: "droit" },
+    { slug: "competences-transverses", label: "Compétences transverses", domainSlug: "droit" },
+    { slug: "droit-immobilier", label: "Droit immobilier", domainSlug: "droit" },
+    { slug: "urbanisme-construction", label: "Droit de l'urbanisme et de la construction", domainSlug: "droit" },
     // Soft Skills
-    { slug: "management", label: "Management", domainSlug: "soft-skills", sortOrder: 1 },
-    { slug: "gestion-projet", label: "Gestion de projet", domainSlug: "soft-skills", sortOrder: 2 },
-    { slug: "communication", label: "Communication", domainSlug: "soft-skills", sortOrder: 3 },
-    { slug: "efficacite-professionnelle", label: "Efficacité professionnelle", domainSlug: "soft-skills", sortOrder: 4 },
-    { slug: "developpement-personnel", label: "Développement personnel", domainSlug: "soft-skills", sortOrder: 5 },
-    { slug: "relation-client", label: "Relation client – Commercial", domainSlug: "soft-skills", sortOrder: 6 },
-    { slug: "pedagogie", label: "Pédagogie – Formation de formateurs", domainSlug: "soft-skills", sortOrder: 7 },
+    { slug: "management", label: "Management", domainSlug: "soft-skills" },
+    { slug: "gestion-projet", label: "Gestion de projet", domainSlug: "soft-skills" },
+    { slug: "communication", label: "Communication", domainSlug: "soft-skills" },
+    { slug: "efficacite-professionnelle", label: "Efficacité professionnelle", domainSlug: "soft-skills" },
+    { slug: "developpement-personnel", label: "Développement personnel", domainSlug: "soft-skills" },
+    { slug: "relation-client", label: "Relation client – Commercial", domainSlug: "soft-skills" },
+    { slug: "pedagogie", label: "Pédagogie – Formation de formateurs", domainSlug: "soft-skills" },
     // Technologies Numériques
-    { slug: "bureautique", label: "Bureautique", domainSlug: "technologies-numeriques", sortOrder: 1 },
-    { slug: "ia", label: "IA – Intelligence artificielle", domainSlug: "technologies-numeriques", sortOrder: 2 },
-    { slug: "ia-secteur-public", label: "IA Secteur public", domainSlug: "technologies-numeriques", sortOrder: 3 },
-    { slug: "informatique", label: "Informatique", domainSlug: "technologies-numeriques", sortOrder: 4 },
-    { slug: "marketing-digital", label: "Marketing digital", domainSlug: "technologies-numeriques", sortOrder: 5 },
+    { slug: "bureautique", label: "Bureautique", domainSlug: "technologies-numeriques" },
+    { slug: "ia", label: "IA – Intelligence artificielle", domainSlug: "technologies-numeriques" },
+    { slug: "ia-secteur-public", label: "IA Secteur public", domainSlug: "technologies-numeriques" },
+    { slug: "informatique", label: "Informatique", domainSlug: "technologies-numeriques" },
+    { slug: "marketing-digital", label: "Marketing digital", domainSlug: "technologies-numeriques" },
     // Secteurs & Métiers
-    { slug: "action-sociale", label: "Action sociale", domainSlug: "secteurs-et-metiers", sortOrder: 1 },
-    { slug: "secteur-public", label: "Secteur public", domainSlug: "secteurs-et-metiers", sortOrder: 2 },
-    { slug: "marches-publics", label: "Marchés publics", domainSlug: "secteurs-et-metiers", sortOrder: 3 },
-    { slug: "services-generaux", label: "Services généraux", domainSlug: "secteurs-et-metiers", sortOrder: 4 },
-    { slug: "assistants", label: "Assistant(e)s", domainSlug: "secteurs-et-metiers", sortOrder: 5 },
+    { slug: "action-sociale", label: "Action sociale", domainSlug: "secteurs-et-metiers" },
+    { slug: "secteur-public", label: "Secteur public", domainSlug: "secteurs-et-metiers" },
+    { slug: "marches-publics", label: "Marchés publics", domainSlug: "secteurs-et-metiers" },
+    { slug: "services-generaux", label: "Services généraux", domainSlug: "secteurs-et-metiers" },
+    { slug: "assistants", label: "Assistant(e)s", domainSlug: "secteurs-et-metiers" },
   ]
   const insertedSubCats = await db.insert(subCategories).values(
-    subCatData.map((s) => ({ slug: s.slug, label: s.label, domainId: domainMap[s.domainSlug], sortOrder: s.sortOrder })),
+    subCatData.map((s) => ({ slug: s.slug, label: s.label, domainId: domainMap[s.domainSlug] })),
   ).returning()
   console.log(`  ✓ ${insertedSubCats.length} sub-categories`)
   const subCatMap = Object.fromEntries(insertedSubCats.map((s) => [s.slug, s.id]))
@@ -167,10 +212,25 @@ async function main() {
       rating: c.rating,
       reviewsCount: c.reviewsCount,
       duration: c.duration,
-      badge: c.badge as any ?? null,
     })),
   ).returning()
   console.log(`  ✓ ${insertedFormations.length} formations`)
+
+  // ── Formation-Badge links ──
+  const formationBadgePairs: { formationId: number; badgeId: number }[] = []
+  for (let i = 0; i < formationData.length; i++) {
+    const badgeName = formationData[i].badge
+    if (badgeName && badgeMap[badgeName]) {
+      formationBadgePairs.push({
+        formationId: insertedFormations[i].id,
+        badgeId: badgeMap[badgeName],
+      })
+    }
+  }
+  if (formationBadgePairs.length > 0) {
+    await db.insert(formationBadges).values(formationBadgePairs)
+  }
+  console.log(`  ✓ ${formationBadgePairs.length} formation-badge links`)
 
   // ── Formation-Modality links ──
   const formationModalityPairs: { formationId: number; modalityId: number }[] = []
@@ -187,19 +247,6 @@ async function main() {
   }
   console.log(`  ✓ ${formationModalityPairs.length} formation-modality links`)
 
-  // ── Child courses ──
-  const childCourseData = formationData.map((formation, i) => ({
-    formationId: insertedFormations[i].id,
-    title: `${formation.title} - session principale`,
-    slug: `${formation.slug}-session-principale`,
-    summary: `Cours principal pour ${formation.title}.`,
-    duration: formation.duration,
-    modality: formation.modalitySlugs[0] ?? null,
-    sortOrder: 1,
-  }))
-  const insertedCourses = await db.insert(courses).values(childCourseData).returning()
-  console.log(`  ✓ ${insertedCourses.length} child courses`)
-
   // ── Certifications ──
   const certData = [
     { pageSlug: "certifications-amf", title: "Certification AMF", description: "La certification AMF propose des outils pédagogiques performants, adaptés à la compréhension. Avec un parcours 100% digital et ses différentes options, la préparation à l'examen est optimisée pour la réussite.", badge: "NOUVEAU", audience: "Professionnels", href: "#", groupKey: "pro", sortOrder: 1 },
@@ -214,6 +261,22 @@ async function main() {
   ]
   const insertedCerts = await db.insert(certifications).values(certData).returning()
   console.log(`  ✓ ${insertedCerts.length} certifications`)
+
+  // ── Formation-Certification links ──
+  const formationCertPairs: { formationId: number; certificationId: number }[] = []
+  const certSlugsForAmf = ["droit-compliance-officer", "chiffre-finance-non-financiers", "qse-rse-niveau-1", "soft-management-equipe"]
+  const firstAmfCert = insertedCerts.find((c) => c.pageSlug === "certifications-amf")
+  if (firstAmfCert) {
+    for (const fSlug of certSlugsForAmf) {
+      const formation = insertedFormations.find((f) => f.slug === fSlug)
+      if (!formation) continue
+      formationCertPairs.push({ formationId: formation.id, certificationId: firstAmfCert.id })
+    }
+  }
+  if (formationCertPairs.length > 0) {
+    await db.insert(formationCertifications).values(formationCertPairs)
+  }
+  console.log(`  ✓ ${formationCertPairs.length} formation-certification links`)
 
   // ── Testimonials ──
   const testimonialData = [

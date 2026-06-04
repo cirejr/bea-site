@@ -4,26 +4,30 @@ import { revalidatePath } from "next/cache"
 import { eq } from "drizzle-orm"
 import { getDb as _getDb } from "@/db"
 import {
+  badges as dBadges,
+  catalogueRequests as dCatalogueRequests,
   certifications as dCertifications,
-  courses as dCourses,
   domains as dDomains,
   faqs as dFaqs,
   featuredFormations as dFeaturedFormations,
+  formationBadges as dFormationBadges,
   formationCertifications as dFormationCertifications,
   formationModalities as dFormationModalities,
   formations as dFormations,
+  formationsComplementaires as dFormationsComplementaires,
+  formationsRelated as dFormationsRelated,
   modalites as dModalites,
   pdfResources as dPdfResources,
   subCategories as dSubCategories,
   testimonials as dTestimonials,
 } from "@/db/schema"
+import { CATALOGUE_SLUGS, ROLE_VALUES } from "@/lib/data/catalogues"
 
 const db = () => _getDb()
 
 function revalidateCatalogue() {
   revalidatePath("/dashboard")
   revalidatePath("/dashboard/formations")
-  revalidatePath("/dashboard/courses")
   revalidatePath("/training")
 }
 
@@ -35,6 +39,10 @@ export async function createFormation(data: {
   slug: string
   summary?: string | null
   description?: string | null
+  objectifs?: string[]
+  programmes?: string | null
+  pourQui?: string | null
+  financement?: string | null
   price?: string | null
   salePrice?: string | null
   currency?: string | null
@@ -43,12 +51,14 @@ export async function createFormation(data: {
   rating?: string | null
   reviewsCount?: number
   duration?: string | null
-  badge?: string | null
   href?: string | null
   isActive?: boolean
   sortOrder?: number
   modalityIds?: number[]
   certificationIds?: number[]
+  badgeIds?: number[]
+  prereqIds?: number[]
+  relatedFormationIds?: number[]
 }) {
   const [formation] = await db()
     .insert(dFormations)
@@ -59,6 +69,10 @@ export async function createFormation(data: {
       slug: data.slug,
       summary: data.summary ?? null,
       description: data.description ?? null,
+      objectifs: (data.objectifs ?? []) as any,
+      programmes: data.programmes ?? null,
+      pourQui: data.pourQui ?? null,
+      financement: data.financement ?? null,
       price: data.price ?? null,
       salePrice: data.salePrice ?? null,
       currency: data.currency || "EUR",
@@ -67,7 +81,6 @@ export async function createFormation(data: {
       rating: data.rating ?? null,
       reviewsCount: data.reviewsCount ?? 0,
       duration: data.duration ?? null,
-      badge: (data.badge || null) as any,
       href: data.href ?? null,
       isActive: data.isActive ?? true,
       sortOrder: data.sortOrder ?? 0,
@@ -80,6 +93,28 @@ export async function createFormation(data: {
 
   if (data.certificationIds?.length) {
     await db().insert(dFormationCertifications).values(data.certificationIds.map((certificationId) => ({ formationId: formation.id, certificationId })))
+  }
+
+  if (data.badgeIds?.length) {
+    await db().insert(dFormationBadges).values(data.badgeIds.map((badgeId) => ({ formationId: formation.id, badgeId })))
+  }
+
+  if (data.prereqIds?.length) {
+    const pairs = data.prereqIds.flatMap((complementaryFormationId) => [
+      { formationId: formation.id, complementaryFormationId },
+      { formationId: complementaryFormationId, complementaryFormationId: formation.id },
+    ])
+    await db().insert(dFormationsComplementaires).values(pairs)
+  }
+
+  if (data.relatedFormationIds?.length) {
+    await db().insert(dFormationsRelated).values(
+      data.relatedFormationIds.map((relatedFormationId, i) => ({
+        formationId: formation.id,
+        relatedFormationId,
+        sortOrder: i,
+      }))
+    )
   }
 
   revalidateCatalogue()
@@ -95,6 +130,10 @@ export async function updateFormation(
     slug?: string
     summary?: string | null
     description?: string | null
+    objectifs?: string[]
+    programmes?: string | null
+    pourQui?: string | null
+    financement?: string | null
     price?: string | null
     salePrice?: string | null
     currency?: string | null
@@ -103,16 +142,20 @@ export async function updateFormation(
     rating?: string | null
     reviewsCount?: number
     duration?: string | null
-    badge?: string | null
     href?: string | null
     isActive?: boolean
     sortOrder?: number
     modalityIds?: number[]
     certificationIds?: number[]
+    badgeIds?: number[]
+    prereqIds?: number[]
+    relatedFormationIds?: number[]
   },
 ) {
-  const { modalityIds, certificationIds, ...fields } = data
-  await db().update(dFormations).set(fields as any).where(eq(dFormations.id, id))
+  const { modalityIds, certificationIds, badgeIds, prereqIds, relatedFormationIds, ...fields } = data
+  const updateFields: Record<string, unknown> = { ...fields }
+  if (data.objectifs !== undefined) updateFields.objectifs = data.objectifs as any
+  await db().update(dFormations).set(updateFields as any).where(eq(dFormations.id, id))
 
   if (modalityIds !== undefined) {
     await db().delete(dFormationModalities).where(eq(dFormationModalities.formationId, id))
@@ -128,6 +171,38 @@ export async function updateFormation(
     }
   }
 
+  if (badgeIds !== undefined) {
+    await db().delete(dFormationBadges).where(eq(dFormationBadges.formationId, id))
+    if (badgeIds.length > 0) {
+      await db().insert(dFormationBadges).values(badgeIds.map((badgeId) => ({ formationId: id, badgeId })))
+    }
+  }
+
+  if (prereqIds !== undefined) {
+    await db().delete(dFormationsComplementaires).where(eq(dFormationsComplementaires.formationId, id))
+    await db().delete(dFormationsComplementaires).where(eq(dFormationsComplementaires.complementaryFormationId, id))
+    if (prereqIds.length > 0) {
+      const pairs = prereqIds.flatMap((complementaryFormationId) => [
+        { formationId: id, complementaryFormationId },
+        { formationId: complementaryFormationId, complementaryFormationId: id },
+      ])
+      await db().insert(dFormationsComplementaires).values(pairs)
+    }
+  }
+
+  if (relatedFormationIds !== undefined) {
+    await db().delete(dFormationsRelated).where(eq(dFormationsRelated.formationId, id))
+    if (relatedFormationIds.length > 0) {
+      await db().insert(dFormationsRelated).values(
+        relatedFormationIds.map((relatedFormationId, i) => ({
+          formationId: id,
+          relatedFormationId,
+          sortOrder: i,
+        }))
+      )
+    }
+  }
+
   revalidateCatalogue()
   revalidatePath(`/training/${fields.slug ?? ""}`)
 }
@@ -137,50 +212,15 @@ export async function deleteFormation(id: number) {
   revalidateCatalogue()
 }
 
-// Child courses
-export async function createCourse(data: {
-  formationId: number
-  title: string
-  slug: string
-  summary?: string | null
-  duration?: string | null
-  modality?: string | null
-  isActive?: boolean
-  sortOrder?: number
-}) {
-  const [course] = await db().insert(dCourses).values({ ...data, isActive: data.isActive ?? true, sortOrder: data.sortOrder ?? 0 }).returning()
-  revalidateCatalogue()
-  return course
-}
-
-export async function updateCourse(id: number, data: {
-  formationId?: number
-  title?: string
-  slug?: string
-  summary?: string | null
-  duration?: string | null
-  modality?: string | null
-  isActive?: boolean
-  sortOrder?: number
-}) {
-  await db().update(dCourses).set(data).where(eq(dCourses.id, id))
-  revalidateCatalogue()
-}
-
-export async function deleteCourse(id: number) {
-  await db().delete(dCourses).where(eq(dCourses.id, id))
-  revalidateCatalogue()
-}
-
 // Domains
-export async function createDomain(data: { slug: string; label: string; description?: string | null; iconName?: string | null; isActive?: boolean; sortOrder?: number }) {
-  const [domain] = await db().insert(dDomains).values({ ...data, isActive: data.isActive ?? true, sortOrder: data.sortOrder ?? 0 }).returning()
+export async function createDomain(data: { slug: string; label: string; description?: string | null; isActive?: boolean }) {
+  const [domain] = await db().insert(dDomains).values({ ...data, isActive: data.isActive ?? true }).returning()
   revalidatePath("/dashboard/domains")
   revalidateCatalogue()
   return domain
 }
 
-export async function updateDomain(id: number, data: { slug?: string; label?: string; description?: string | null; iconName?: string | null; isActive?: boolean; sortOrder?: number }) {
+export async function updateDomain(id: number, data: { slug?: string; label?: string; description?: string | null; isActive?: boolean }) {
   await db().update(dDomains).set(data).where(eq(dDomains.id, id))
   revalidatePath("/dashboard/domains")
   revalidateCatalogue()
@@ -193,14 +233,14 @@ export async function deleteDomain(id: number) {
 }
 
 // Sub-categories
-export async function createSubCategory(data: { domainId: number; slug: string; label: string; description?: string | null; isActive?: boolean; sortOrder?: number }) {
-  const [sub] = await db().insert(dSubCategories).values({ ...data, isActive: data.isActive ?? true, sortOrder: data.sortOrder ?? 0 }).returning()
+export async function createSubCategory(data: { domainId: number; slug: string; label: string; description?: string | null; isActive?: boolean }) {
+  const [sub] = await db().insert(dSubCategories).values({ ...data, isActive: data.isActive ?? true }).returning()
   revalidatePath("/dashboard/domains")
   revalidateCatalogue()
   return sub
 }
 
-export async function updateSubCategory(id: number, data: { slug?: string; label?: string; description?: string | null; isActive?: boolean; sortOrder?: number }) {
+export async function updateSubCategory(id: number, data: { slug?: string; label?: string; description?: string | null; isActive?: boolean }) {
   await db().update(dSubCategories).set(data).where(eq(dSubCategories.id, id))
   revalidatePath("/dashboard/domains")
   revalidateCatalogue()
@@ -240,14 +280,14 @@ export async function deleteCertification(id: number) {
 }
 
 // FAQs
-export async function createFaq(data: { question: string; answer: string; domainId?: number | null; subCategoryId?: number | null; formationId?: number | null; courseId?: number | null; certificationId?: number | null; isActive?: boolean; sortOrder?: number }) {
+export async function createFaq(data: { question: string; answer: string; domainId?: number | null; subCategoryId?: number | null; formationId?: number | null; certificationId?: number | null; isActive?: boolean; sortOrder?: number }) {
   const [faq] = await db().insert(dFaqs).values({ ...data, isActive: data.isActive ?? true, sortOrder: data.sortOrder ?? 0 }).returning()
   revalidatePath("/dashboard/faqs")
   revalidateCatalogue()
   return faq
 }
 
-export async function updateFaq(id: number, data: { question?: string; answer?: string; domainId?: number | null; subCategoryId?: number | null; formationId?: number | null; courseId?: number | null; certificationId?: number | null; isActive?: boolean; sortOrder?: number }) {
+export async function updateFaq(id: number, data: { question?: string; answer?: string; domainId?: number | null; subCategoryId?: number | null; formationId?: number | null; certificationId?: number | null; isActive?: boolean; sortOrder?: number }) {
   await db().update(dFaqs).set(data).where(eq(dFaqs.id, id))
   revalidatePath("/dashboard/faqs")
   revalidateCatalogue()
@@ -260,14 +300,14 @@ export async function deleteFaq(id: number) {
 }
 
 // PDFs
-export async function createPdfResource(data: { title: string; description?: string | null; url: string; resourceType?: "brochure" | "program" | "guide" | "certificate" | "other"; domainId?: number | null; subCategoryId?: number | null; formationId?: number | null; courseId?: number | null; certificationId?: number | null; isActive?: boolean; sortOrder?: number }) {
+export async function createPdfResource(data: { title: string; description?: string | null; url: string; resourceType?: "brochure" | "program" | "guide" | "certificate" | "other"; domainId?: number | null; subCategoryId?: number | null; formationId?: number | null; certificationId?: number | null; isActive?: boolean; sortOrder?: number }) {
   const [resource] = await db().insert(dPdfResources).values({ ...data, resourceType: data.resourceType ?? "other", isActive: data.isActive ?? true, sortOrder: data.sortOrder ?? 0 }).returning()
   revalidatePath("/dashboard/pdfs")
   revalidateCatalogue()
   return resource
 }
 
-export async function updatePdfResource(id: number, data: { title?: string; description?: string | null; url?: string; resourceType?: "brochure" | "program" | "guide" | "certificate" | "other"; domainId?: number | null; subCategoryId?: number | null; formationId?: number | null; courseId?: number | null; certificationId?: number | null; isActive?: boolean; sortOrder?: number }) {
+export async function updatePdfResource(id: number, data: { title?: string; description?: string | null; url?: string; resourceType?: "brochure" | "program" | "guide" | "certificate" | "other"; domainId?: number | null; subCategoryId?: number | null; formationId?: number | null; certificationId?: number | null; isActive?: boolean; sortOrder?: number }) {
   await db().update(dPdfResources).set(data).where(eq(dPdfResources.id, id))
   revalidatePath("/dashboard/pdfs")
   revalidateCatalogue()
@@ -313,4 +353,93 @@ export async function reorderFeaturedFormations(items: { id: number; sortOrder: 
     await db().update(dFeaturedFormations).set({ sortOrder: item.sortOrder }).where(eq(dFeaturedFormations.id, item.id))
   }
   revalidateCatalogue()
+}
+
+// Badges
+export async function createBadge(data: { name: string; slug: string; color?: string }) {
+  const [badge] = await db().insert(dBadges).values({ ...data, color: data.color ?? "#3b82f6" }).returning()
+  revalidatePath("/dashboard/badges")
+  revalidateCatalogue()
+  return badge
+}
+
+export async function updateBadge(id: number, data: { name?: string; slug?: string; color?: string }) {
+  await db().update(dBadges).set(data).where(eq(dBadges.id, id))
+  revalidatePath("/dashboard/badges")
+  revalidateCatalogue()
+}
+
+export async function deleteBadge(id: number) {
+  await db().delete(dBadges).where(eq(dBadges.id, id))
+  revalidatePath("/dashboard/badges")
+  revalidateCatalogue()
+}
+
+// Catalogue requests
+export type CatalogueRequestState = {
+  status: "idle" | "success" | "error"
+  message: string
+  fieldErrors?: Partial<Record<"firstName" | "lastName" | "email" | "phone" | "company" | "role" | "roleOther" | "catalogues", string>>
+}
+
+export async function submitCatalogueRequest(
+  _prev: CatalogueRequestState,
+  formData: FormData,
+): Promise<CatalogueRequestState> {
+  const firstName = (formData.get("firstName") as string | null)?.trim() ?? ""
+  const lastName = (formData.get("lastName") as string | null)?.trim() ?? ""
+  const email = (formData.get("email") as string | null)?.trim() ?? ""
+  const phone = (formData.get("phone") as string | null)?.trim() ?? ""
+  const company = (formData.get("company") as string | null)?.trim() ?? ""
+  const role = (formData.get("role") as string | null)?.trim() ?? ""
+  const roleOther = (formData.get("roleOther") as string | null)?.trim() ?? ""
+  const catalogues = (formData.getAll("catalogues") as string[])
+    .map((value) => value.trim())
+    .filter((value) => value.length > 0)
+  const locale = (formData.get("locale") as string | null)?.trim() ?? "fr"
+
+  const fieldErrors: CatalogueRequestState["fieldErrors"] = {}
+
+  if (firstName.length < 2) fieldErrors.firstName = "ERR_FIRST_NAME"
+  if (lastName.length < 2) fieldErrors.lastName = "ERR_LAST_NAME"
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) fieldErrors.email = "ERR_EMAIL"
+  if (phone && phone.replace(/\D/g, "").length < 6) fieldErrors.phone = "ERR_PHONE"
+  if (company.length < 2) fieldErrors.company = "ERR_COMPANY"
+  if (!ROLE_VALUES.includes(role)) fieldErrors.role = "ERR_ROLE"
+  if (role === "other" && roleOther.length < 2) fieldErrors.roleOther = "ERR_ROLE_OTHER"
+  if (catalogues.length === 0) fieldErrors.catalogues = "ERR_CATALOGUES"
+  else {
+    const invalid = catalogues.filter((slug) => !CATALOGUE_SLUGS.includes(slug))
+    if (invalid.length > 0) fieldErrors.catalogues = "ERR_CATALOGUES"
+  }
+
+  if (Object.keys(fieldErrors).length > 0) {
+    return {
+      status: "error",
+      message: "FORM_ERROR",
+      fieldErrors,
+    }
+  }
+
+  try {
+    await db().insert(dCatalogueRequests).values({
+      firstName,
+      lastName,
+      email,
+      phone: phone || null,
+      company,
+      role,
+      roleOther: role === "other" ? roleOther : null,
+      catalogueSlugs: catalogues,
+      locale,
+    })
+    revalidatePath("/dashboard/catalogue-requests")
+    return { status: "success", message: "FORM_SUCCESS", fieldErrors: {} }
+  } catch (error) {
+    return {
+      status: "error",
+      message: (error as Error).message ?? "FORM_ERROR",
+      fieldErrors,
+    }
+  }
 }

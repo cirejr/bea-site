@@ -1,5 +1,6 @@
 "use client"
 
+import { DeleteConfirmDialog } from "@/components/delete-confirm-dialog"
 import { createColumnHelper } from "@tanstack/react-table"
 import { deletePdfResource } from "@/lib/actions"
 import { Button } from "@/components/ui/button"
@@ -37,9 +38,9 @@ export const pdfsColumns = [
     header: "Actions",
     cell: ({ row }) => (
       <div className="flex justify-end">
-        <form action={deletePdfResource.bind(null, row.original.id)}>
+        <DeleteConfirmDialog action={deletePdfResource.bind(null, row.original.id)} entityLabel="cette ressource PDF">
           <Button variant="ghost" className="text-destructive">Supprimer</Button>
-        </form>
+        </DeleteConfirmDialog>
       </div>
     ),
   }),

@@ -4,6 +4,7 @@ export default {
     home: "Home",
     consultancy: "Consultancy",
     training: "Training",
+    catalogues: "Catalogues",
     about: "About",
     contact: "Contact",
     cta: "Request a Quote",
@@ -63,8 +64,9 @@ export default {
     training_qa_parcours: "Learning Paths",
     training_qa_certifiantes: "Certified Training",
     training_qa_classes_virtuelles: "Virtual Classes",
-    training_qa_offre_lde: "Lefebvre Dalloz Education",
+    training_qa_offre_lde: "BEA Offer",
     training_qa_recherche: "All Training Courses",
+    formationsCertifiantes: "Certified Training",
   },
 
   // Hero
@@ -74,6 +76,84 @@ export default {
     description: "Empowering African enterprises through architectural precision.",
     ctaPrimary: "Explore Catalog",
     ctaSecondary: "Consulting Services",
+  },
+
+  // Catalogues page
+  catalogues: {
+    hero: {
+      eyebrow: "Resources",
+      title: "Catalogues & brochures",
+      description: "Download our catalogues by domain or request them online to receive a printed or customised version.",
+    },
+    actions: {
+      download: "Download",
+      request: "Request online",
+    },
+    empty: "No catalogue is currently available. Contact us to receive our documentation.",
+    form: {
+      eyebrow: "Custom request",
+      title: "Receive our catalogues by email",
+      description: "Pick the catalogues you need and share your details — we'll email them to you shortly.",
+      fields: {
+        firstName: "First name",
+        firstNamePlaceholder: "Jane",
+        lastName: "Last name",
+        lastNamePlaceholder: "Doe",
+        email: "Work email",
+        emailPlaceholder: "jane.doe@company.com",
+        phone: "Phone",
+        phonePlaceholder: "+1 555 000 0000",
+        company: "Company",
+        companyPlaceholder: "Acme Inc.",
+        role: "Role",
+        rolePlaceholder: "Select your role",
+        roleOther: "Specify your role",
+        roleOtherPlaceholder: "e.g. EHS Manager",
+        catalogues: "Requested catalogues",
+        cataloguesHelp: "Tick one or more catalogues.",
+      },
+      requiredHint: "Fields marked with an asterisk are required.",
+      submit: "Send my request",
+      submitting: "Sending…",
+    },
+    roles: {
+      directeur: "Director",
+      drh: "HR Director",
+      daf: "CFO",
+      responsableFormation: "Training Manager",
+      manager: "Manager",
+      consultant: "Consultant",
+      other: "Other",
+    },
+    topic: {
+      directionFinanciere: "Finance",
+      softSkills2026: "Soft skills 2026",
+      technologiesNumeriquesIA2026: "Digital technologies & AI 2026",
+      expertsComptables2026: "Chartered accountants 2026",
+      formations2026: "Training 2026",
+      directionJuridique: "Legal",
+      immobilierConstructionUrbanisme: "Real estate, construction & urban planning",
+      banqueAssuranceReglementaires: "Banking, insurance & regulatory",
+      secteurPublic: "Public sector",
+      representantsPersonnel: "Employee representatives",
+      santeSecuriteEnvironnement: "Health, safety & environment",
+      directionsRessourcesHumaines: "HR departments",
+    },
+    feedback: {
+      successTitle: "Request sent",
+      successDescription: "Thank you, we'll get back to you shortly with the requested catalogues.",
+      formError: "Some fields need your attention. Please check and try again.",
+      fields: {
+        firstName: "Please enter your first name.",
+        lastName: "Please enter your last name.",
+        email: "Please enter a valid email address.",
+        phone: "Please enter a valid phone number.",
+        company: "Please enter your company name.",
+        role: "Please select your role.",
+        roleOther: "Please specify your role.",
+        catalogues: "Please select at least one catalogue.",
+      },
+    },
   },
 
   // Home - Consultancy Section
@@ -297,6 +377,14 @@ export default {
       },
     },
     cta: "Book Consultation",
+    domainPage: {
+      subcategoriesEyebrow: "Sub-categories",
+      subcategoriesTitle: "Explore sub-categories",
+      seeFormations: "See trainings",
+      formationsCount: "{count, plural, =0 {No training} one {# training} other {# trainings}}",
+      modalityLabel: "Modality",
+      clearModality: "Clear",
+    },
   },
 
   // Contact Page
@@ -405,5 +493,55 @@ export default {
     title: "Structural Integrity",
     description: "Our methodology focuses on the foundational pillars of business architecture.",
     badge: "Certified OHADA Expert",
+  },
+
+  // Dashboard
+  dashboard: {
+    catalogueRequests: {
+      title: "Catalogue requests",
+      description: "Requests submitted through the public form.",
+      empty: "No request yet.",
+      count: "{count, plural, =0 {No request} one {# request} other {# requests}}",
+      columns: {
+        createdAt: "Date",
+        fullName: "Name",
+        company: "Company",
+        email: "Email",
+        phone: "Phone",
+        role: "Role",
+        catalogues: "Catalogues",
+      },
+    },
+  },
+
+  // Certified training marketing page
+  formationsCertifiantes: {
+    eyebrow: "2026 catalogue",
+    stat1: "{count, plural, =0 {No certificate} one {# certificate} other {# certificates}}",
+    stat2: "{count, plural, =0 {No expertise area} one {# expertise area} other {# expertise areas}}",
+    stat3: "{percent}% online",
+    ctaPrimary: "Request the program",
+    ctaSecondary: "Download brochure",
+    heroEyebrow: "Feature dossier",
+    heroTitle: "The year certification becomes a standard.",
+    heroLead: "Twelve new certificates designed to match the rising sophistication of finance, HR, audit and entrepreneurship roles across West Africa.",
+    featured: "Featured",
+    featuredCta: "View full program",
+    empty: {
+      title: "No certified training available",
+      body: "New certificates will be available soon. Check back later to discover our certified training catalog.",
+    },
+    emptyCta: "Get notified at launch",
+    categories: {
+      finance: "Finance & Taxation",
+      audit: "Audit & Control",
+      rh: "Human resources",
+      business: "Commerce & Strategy",
+    },
+    ctaSection: {
+      title: "Build your certification path.",
+      body: "Our teams design in-house and bespoke learning paths for your teams, on-site or in virtual classrooms.",
+      button: "Talk to an advisor",
+    },
   },
 }

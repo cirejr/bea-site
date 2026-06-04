@@ -1,62 +1,53 @@
 "use client"
 
-import * as React from "react"
-import { Add01Icon } from "@hugeicons/core-free-icons"
-import { HugeiconsIcon } from "@hugeicons/react"
-import { Button } from "@/components/ui/button"
 import { DomainCard } from "@/components/domain-card"
 import { DomainForm } from "@/components/domain-form"
-import { GridDataTable } from "@/components/grid-data-table"
+import { SearchInput } from "@/components/tables/search-input"
 import { domainColumns } from "@/components/tables/columns/domains"
+import { TableOptions } from "@/components/tables/table-options"
+
+interface SubCategory {
+  id: number
+  slug: string
+  label: string
+  description: string | null
+  isActive: boolean
+}
 
 interface DomainWithSubs {
   id: number
   slug: string
   label: string
   description: string | null
-  iconName: string | null
   isActive: boolean
-  sortOrder: number
-  subCategories: {
-    id: number
-    slug: string
-    label: string
-    description: string | null
-    isActive: boolean
-    sortOrder: number
-  }[]
+  subCategories: SubCategory[]
 }
 
-export function DomainsPageClient({
-  domains,
-}: {
-  domains: DomainWithSubs[]
-}) {
-  const [domainFormOpen, setDomainFormOpen] = React.useState(false)
+export function DomainsPageClient({ domains }: { domains: DomainWithSubs[] }) {
+  const table = TableOptions({ columns: domainColumns, data: domains })
+  const filteredDomains = table.getRowModel().rows.map((row) => row.original)
 
   return (
-    <>
+    <div>
       <div className="mb-6 flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold">Domaines &amp; Sous-catégories</h1>
-          <p className="text-muted-foreground">{domains.length} domaine(s)</p>
+          <p className="text-muted-foreground">{filteredDomains.length} domaine(s)</p>
         </div>
-        <Button onClick={() => setDomainFormOpen(true)}>
-          <HugeiconsIcon icon={Add01Icon} strokeWidth={2} />
-          Nouveau domaine
-        </Button>
+        <DomainForm />
       </div>
 
-      <GridDataTable
-        columns={domainColumns}
-        data={domains}
-        renderCard={(domain) => <DomainCard key={domain.id} domain={domain} />}
-      />
+      <SearchInput table={table} />
 
-      <DomainForm
-        open={domainFormOpen}
-        onOpenChange={setDomainFormOpen}
-      />
-    </>
+      <div className="mt-6 space-y-4">
+        {filteredDomains.length === 0 ? (
+          <p className="text-sm text-muted-foreground">Aucun domaine ne correspond à votre recherche.</p>
+        ) : (
+          filteredDomains.map((domain) => (
+            <DomainCard key={domain.id} domain={domain} />
+          ))
+        )}
+      </div>
+    </div>
   )
 }

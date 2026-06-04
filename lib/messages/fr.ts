@@ -4,6 +4,7 @@ export default {
     home: "Accueil",
     consultancy: "Conseil",
     training: "Formations",
+    catalogues: "Catalogues",
     about: "À propos",
     contact: "Contact",
     cta: "Demander un devis",
@@ -63,8 +64,9 @@ export default {
     training_qa_parcours: "Parcours",
     training_qa_certifiantes: "Formations certifiantes",
     training_qa_classes_virtuelles: "Nos classes virtuelles",
-    training_qa_offre_lde: "Offre Lefebvre Dalloz Education",
+    training_qa_offre_lde: "Offre BEA",
     training_qa_recherche: "Toutes nos formations",
+    formationsCertifiantes: "Formations certifiantes",
   },
 
   // Hero
@@ -74,6 +76,84 @@ export default {
     description: "Autonomiser les entreprises africaines grâce à la précision architecturale.",
     ctaPrimary: "Explorer le catalogue",
     ctaSecondary: "Services de conseil",
+  },
+
+  // Catalogues page
+  catalogues: {
+    hero: {
+      eyebrow: "Ressources",
+      title: "Catalogues & brochures",
+      description: "Téléchargez nos catalogues par domaine ou demandez-les en ligne pour recevoir une version imprimée ou personnalisée.",
+    },
+    actions: {
+      download: "Télécharger",
+      request: "Demander en ligne",
+    },
+    empty: "Aucun catalogue n'est disponible pour le moment. Contactez-nous pour recevoir notre documentation.",
+    form: {
+      eyebrow: "Demande personnalisée",
+      title: "Recevez nos catalogues par email",
+      description: "Sélectionnez les catalogues qui vous intéressent et indiquez vos coordonnées : nous vous les envoyons par email dans les meilleurs délais.",
+      fields: {
+        firstName: "Prénom",
+        firstNamePlaceholder: "Aïssatou",
+        lastName: "Nom",
+        lastNamePlaceholder: "Diop",
+        email: "Email professionnel",
+        emailPlaceholder: "aissatou.diop@entreprise.sn",
+        phone: "Téléphone",
+        phonePlaceholder: "+221 77 000 00 00",
+        company: "Société",
+        companyPlaceholder: "Entreprise & Co",
+        role: "Fonction",
+        rolePlaceholder: "Sélectionnez votre fonction",
+        roleOther: "Précisez votre fonction",
+        roleOtherPlaceholder: "Ex. Responsable QSE",
+        catalogues: "Catalogues souhaités",
+        cataloguesHelp: "Cochez un ou plusieurs catalogues.",
+      },
+      requiredHint: "Les champs marqués d'un astérisque sont obligatoires.",
+      submit: "Envoyer ma demande",
+      submitting: "Envoi en cours…",
+    },
+    roles: {
+      directeur: "Directeur / Directrice",
+      drh: "DRH",
+      daf: "DAF",
+      responsableFormation: "Responsable formation",
+      manager: "Manager",
+      consultant: "Consultant(e)",
+      other: "Autre",
+    },
+    topic: {
+      directionFinanciere: "Direction financière",
+      softSkills2026: "Soft skills 2026",
+      technologiesNumeriquesIA2026: "Technologies numériques & IA 2026",
+      expertsComptables2026: "Experts-comptables 2026",
+      formations2026: "Formations 2026",
+      directionJuridique: "Direction juridique",
+      immobilierConstructionUrbanisme: "Immobilier, construction & urbanisme",
+      banqueAssuranceReglementaires: "Banque, assurance & réglementaires",
+      secteurPublic: "Secteur public",
+      representantsPersonnel: "Représentants du personnel",
+      santeSecuriteEnvironnement: "Santé, sécurité & environnement",
+      directionsRessourcesHumaines: "Directions des ressources humaines",
+    },
+    feedback: {
+      successTitle: "Demande envoyée",
+      successDescription: "Merci, nous revenons vers vous très prochainement avec les catalogues demandés.",
+      formError: "Certains champs nécessitent votre attention. Merci de vérifier et de réessayer.",
+      fields: {
+        firstName: "Merci d'indiquer votre prénom.",
+        lastName: "Merci d'indiquer votre nom.",
+        email: "Merci de saisir un email valide.",
+        phone: "Merci de saisir un numéro de téléphone valide.",
+        company: "Merci d'indiquer le nom de votre société.",
+        role: "Merci de sélectionner votre fonction.",
+        roleOther: "Merci de préciser votre fonction.",
+        catalogues: "Merci de sélectionner au moins un catalogue.",
+      },
+    },
   },
 
   // Home - Consultancy Section
@@ -297,6 +377,14 @@ export default {
       },
     },
     cta: "Réserver une Consultation",
+    domainPage: {
+      subcategoriesEyebrow: "Sous-catégories",
+      subcategoriesTitle: "Explorez les sous-catégories",
+      seeFormations: "Voir les formations",
+      formationsCount: "{count, plural, =0 {Aucune formation} one {# formation} other {# formations}}",
+      modalityLabel: "Modalité",
+      clearModality: "Effacer",
+    },
   },
 
   // Contact Page
@@ -405,5 +493,55 @@ export default {
     title: "Intégrité Structurelle",
     description: "Notre méthodologie se concentre sur les piliers fondamentaux de l'architecture d'entreprise.",
     badge: "Expert OHADA Certifié",
+  },
+
+  // Dashboard
+  dashboard: {
+    catalogueRequests: {
+      title: "Demandes de catalogues",
+      description: "Liste des demandes envoyées depuis le formulaire public.",
+      empty: "Aucune demande pour le moment.",
+      count: "{count, plural, =0 {Aucune demande} one {# demande} other {# demandes}}",
+      columns: {
+        createdAt: "Date",
+        fullName: "Nom",
+        company: "Société",
+        email: "Email",
+        phone: "Téléphone",
+        role: "Fonction",
+        catalogues: "Catalogues",
+      },
+    },
+  },
+
+  // Formations certifiantes marketing page
+  formationsCertifiantes: {
+    eyebrow: "Catalogue 2026",
+    stat1: "{count, plural, =0 {Aucun certificat} one {# certificat} other {# certificats}}",
+    stat2: "{count, plural, =0 {Aucun domaine d'expertise} one {# domaine d'expertise} other {# domaines d'expertise}}",
+    stat3: "{percent}% en ligne",
+    ctaPrimary: "Demander le programme",
+    ctaSecondary: "Télécharger la brochure",
+    heroEyebrow: "Dossier spécial",
+    heroTitle: "L'année où la certification devient un standard.",
+    heroLead: "Douze nouveaux certificats pour répondre à la sophistication croissante des fonctions finance, RH, audit et entrepreneuriat en Afrique de l'Ouest.",
+    featured: "À la une",
+    featuredCta: "Voir le programme complet",
+    empty: {
+      title: "Aucune formation certifiante disponible",
+      body: "De nouveaux certificats seront bientôt disponibles. Revenez bientôt pour découvrir notre catalogue de formations certifiantes.",
+    },
+    emptyCta: "Être prévenu du lancement",
+    categories: {
+      finance: "Finance & Fiscalité",
+      audit: "Audit & Contrôle",
+      rh: "Ressources humaines",
+      business: "Commerce & Stratégie",
+    },
+    ctaSection: {
+      title: "Construisez votre parcours de certification.",
+      body: "Nos équipes conçoivent des parcours intra et sur-mesure pour vos équipes, en présentiel ou en classes virtuelles.",
+      button: "Parler à un conseiller",
+    },
   },
 }

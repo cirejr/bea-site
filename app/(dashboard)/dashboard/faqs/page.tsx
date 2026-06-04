@@ -1,15 +1,14 @@
-import { getCertifications, getCourses, getDomains, getFaqs, getFormations, getSubCategories } from "@/lib/data"
+import { getCertifications, getDomains, getFaqs, getFormations, getSubCategories } from "@/lib/data"
 import { FaqForm } from "@/components/faq-form"
 import { DataTableContent } from "@/components/tables/data-table-content"
 import { faqsColumns } from "@/components/tables/columns/faqs"
 
 export default async function FaqsPage() {
-  const [faqList, domains, subCategories, formations, courses, certifications] = await Promise.all([
+  const [faqList, domains, subCategories, formations, certifications] = await Promise.all([
     getFaqs(),
     getDomains(),
     getSubCategories(),
     getFormations({ activeOnly: false }),
-    getCourses(undefined, { activeOnly: false }),
     getCertifications(),
   ])
 
@@ -28,7 +27,6 @@ export default async function FaqsPage() {
         domains={domains}
         subCategories={subCategories}
         formations={formations}
-        courses={courses}
         certifications={certifications}
       />
 

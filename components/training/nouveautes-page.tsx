@@ -36,7 +36,7 @@ type DomainGroup = {
 const domainGroups: DomainGroup[] = [
   {
     label: "Chiffre",
-    href: "/training/chiffre",
+    href: "/formations/chiffre",
     icon: <Calculator className="h-5 w-5" />,
     categories: [
       "Comptabilité",
@@ -49,7 +49,7 @@ const domainGroups: DomainGroup[] = [
   },
   {
     label: "Droit",
-    href: "/training/droit",
+    href: "/formations/droit",
     icon: <BookOpen className="h-5 w-5" />,
     categories: [
       "Compliance, audit et risques",
@@ -64,7 +64,7 @@ const domainGroups: DomainGroup[] = [
   },
   {
     label: "Gestion RH",
-    href: "/training/gestion-rh",
+    href: "/formations/gestion-rh",
     icon: <Users className="h-5 w-5" />,
     categories: [
       "Droit social",
@@ -77,7 +77,7 @@ const domainGroups: DomainGroup[] = [
   },
   {
     label: "QSE",
-    href: "/training/qse",
+    href: "/formations/qse",
     icon: <Shield className="h-5 w-5" />,
     categories: [
       "Qualité",
@@ -89,7 +89,7 @@ const domainGroups: DomainGroup[] = [
   },
   {
     label: "Soft skills",
-    href: "/training/soft-skills",
+    href: "/formations/soft-skills",
     icon: <Sparkles className="h-5 w-5" />,
     categories: [
       "Management",
@@ -103,7 +103,7 @@ const domainGroups: DomainGroup[] = [
   },
   {
     label: "Technologies numériques",
-    href: "/training/technologies-numeriques",
+    href: "/formations/technologies-numeriques",
     icon: <Monitor className="h-5 w-5" />,
     categories: [
       "Bureautique",
@@ -115,7 +115,7 @@ const domainGroups: DomainGroup[] = [
   },
   {
     label: "Secteurs & Métiers",
-    href: "/training/secteurs-et-metiers",
+    href: "/formations/secteurs-et-metiers",
     icon: <Building className="h-5 w-5" />,
     categories: [
       "Action sociale",

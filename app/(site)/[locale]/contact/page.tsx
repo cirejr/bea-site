@@ -2,7 +2,7 @@ import type { Metadata } from "next"
 import { setRequestLocale } from "next-intl/server"
 
 import { BeaContactPage } from "@/components/contact/page"
-import { routing } from "@/lib/routing"
+import { routing } from "@/i18n/routing"
 
 export const metadata: Metadata = {
   title: "Contact - B.E.A (Academic Architect)",

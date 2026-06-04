@@ -7,16 +7,13 @@ export type DomainRow = {
   label: string
   slug: string
   description: string | null
-  iconName: string | null
   isActive: boolean
-  sortOrder: number
   subCategories: {
     id: number
     slug: string
     label: string
     description: string | null
     isActive: boolean
-    sortOrder: number
   }[]
 }
 
@@ -27,5 +24,8 @@ export const domainColumns = [
   columnHelper.accessor("slug", { header: "Slug" }),
   columnHelper.accessor("description", { header: "Description" }),
   columnHelper.accessor("isActive", { header: "Actif" }),
-  columnHelper.accessor("sortOrder", { header: "Ordre" }),
+  columnHelper.accessor(
+    (row) => row.subCategories.map((sc) => sc.label).join(" "),
+    { id: "searchText", enableGlobalFilter: true }
+  ),
 ]

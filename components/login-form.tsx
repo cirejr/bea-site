@@ -28,10 +28,13 @@ export function LoginForm({
     setError("")
 
     const form = e.currentTarget
-    const email = (new FormData(form)).get("email") as string
-    const password = (new FormData(form)).get("password") as string
+    const email = new FormData(form).get("email") as string
+    const password = new FormData(form).get("password") as string
 
-    const { error: authError } = await authClient.signIn.email({ email, password })
+    const { error: authError } = await authClient.signIn.email({
+      email,
+      password,
+    })
     if (authError) {
       setError(authError.message || "Email ou mot de passe invalide")
       setLoading(false)
@@ -42,7 +45,11 @@ export function LoginForm({
   }
 
   return (
-    <form className={cn("flex flex-col gap-6", className)} onSubmit={handleSubmit} {...props}>
+    <form
+      className={cn("flex flex-col gap-6", className)}
+      onSubmit={handleSubmit}
+      {...props}
+    >
       <FieldGroup>
         <div className="flex flex-col items-center gap-1 text-center">
           <h1 className="text-2xl font-bold">Connexion à votre compte</h1>
@@ -57,17 +64,17 @@ export function LoginForm({
         )}
         <Field>
           <FieldLabel htmlFor="email">Email</FieldLabel>
-          <Input id="email" name="email" type="email" placeholder="admin@bea.fr" required />
+          <Input
+            id="email"
+            name="email"
+            type="email"
+            placeholder="admin@bea.fr"
+            required
+          />
         </Field>
         <Field>
           <div className="flex items-center">
             <FieldLabel htmlFor="password">Mot de passe</FieldLabel>
-            <a
-              href="#"
-              className="ml-auto text-sm underline-offset-4 hover:underline"
-            >
-              Mot de passe oublié ?
-            </a>
           </div>
           <Input id="password" name="password" type="password" required />
         </Field>

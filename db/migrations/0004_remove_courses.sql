@@ -1,0 +1,3 @@
+ALTER TABLE faqs DROP COLUMN IF EXISTS "courseId";
+ALTER TABLE pdf_resources DROP COLUMN IF EXISTS "courseId";
+DROP TABLE IF EXISTS courses;

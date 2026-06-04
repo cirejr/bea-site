@@ -6,13 +6,14 @@ type TrustStat = {
 type TrustStatsProps = {
   stats: TrustStat[]
   className?: string
-  columns?: 2 | 3 | 4
+  columns?: 2 | 3 | 4 | 5
 }
 
 const gridMap = {
   2: "sm:grid-cols-2",
   3: "sm:grid-cols-3",
   4: "sm:grid-cols-2 lg:grid-cols-4",
+  5: "sm:grid-cols-2 lg:grid-cols-5",
 }
 
 export function TrustStats({ stats, className = "", columns = 3 }: TrustStatsProps) {

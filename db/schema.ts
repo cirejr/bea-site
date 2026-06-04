@@ -1,7 +1,6 @@
 import { sql } from "drizzle-orm"
-import { pgTable, text, integer, pgEnum, timestamp, boolean, primaryKey } from "drizzle-orm/pg-core"
+import { pgTable, text, integer, pgEnum, timestamp, boolean, primaryKey, uniqueIndex } from "drizzle-orm/pg-core"
 
-export const badgeEnum = pgEnum("badge", ["Nouveauté", "Incontournable"])
 export const resourceTypeEnum = pgEnum("resource_type", ["brochure", "program", "guide", "certificate", "other"])
 
 export const domains = pgTable("domains", {
@@ -9,9 +8,7 @@ export const domains = pgTable("domains", {
   slug: text().notNull().unique(),
   label: text().notNull(),
   description: text(),
-  iconName: text(),
   isActive: boolean().default(true).notNull(),
-  sortOrder: integer().default(0).notNull(),
   createdAt: timestamp({ withTimezone: true }).default(sql`now()`).notNull(),
   updatedAt: timestamp({ withTimezone: true }).default(sql`now()`).notNull(),
 })
@@ -23,7 +20,6 @@ export const subCategories = pgTable("sub_categories", {
   label: text().notNull(),
   description: text(),
   isActive: boolean().default(true).notNull(),
-  sortOrder: integer().default(0).notNull(),
   createdAt: timestamp({ withTimezone: true }).default(sql`now()`).notNull(),
   updatedAt: timestamp({ withTimezone: true }).default(sql`now()`).notNull(),
 })
@@ -43,6 +39,10 @@ export const formations = pgTable("formations", {
   slug: text().notNull().unique(),
   summary: text(),
   description: text(),
+  objectifs: text().array().default(sql`'{}'::text[]`).notNull(),
+  programmes: text(),
+  pourQui: text(),
+  financement: text(),
   price: text(),
   salePrice: text(),
   currency: text().default("EUR"),
@@ -51,7 +51,6 @@ export const formations = pgTable("formations", {
   rating: text(),
   reviewsCount: integer().default(0),
   duration: text(),
-  badge: badgeEnum(),
   href: text(),
   isActive: boolean().default(true).notNull(),
   sortOrder: integer().default(0).notNull(),
@@ -66,6 +65,48 @@ export const formationModalities = pgTable("formation_modalities", {
   primaryKey({ columns: [t.formationId, t.modalityId] }),
 ])
 
+export const badges = pgTable("badges", {
+  id: integer().primaryKey().generatedAlwaysAsIdentity(),
+  name: text().notNull().unique(),
+  slug: text().notNull().unique(),
+  color: text().notNull().default("#3b82f6"),
+  createdAt: timestamp({ withTimezone: true }).default(sql`now()`).notNull(),
+  updatedAt: timestamp({ withTimezone: true }).default(sql`now()`).notNull(),
+})
+
+export const formationBadges = pgTable("formation_badges", {
+  formationId: integer().notNull().references(() => formations.id, { onDelete: "cascade" }),
+  badgeId: integer().notNull().references(() => badges.id, { onDelete: "cascade" }),
+}, (t) => [
+  primaryKey({ columns: [t.formationId, t.badgeId] }),
+])
+
+export const formationsComplementaires = pgTable("formations_complementaires", {
+  id: integer().primaryKey().generatedAlwaysAsIdentity(),
+  formationId: integer().notNull().references(() => formations.id, { onDelete: "cascade" }),
+  complementaryFormationId: integer().notNull().references(() => formations.id, { onDelete: "cascade" }),
+}, (t) => ({
+  uniquePair: uniqueIndex().on(t.formationId, t.complementaryFormationId),
+}))
+
+export const formationsRelated = pgTable("formations_related", {
+  formationId: integer().notNull().references(() => formations.id, { onDelete: "cascade" }),
+  relatedFormationId: integer().notNull().references(() => formations.id, { onDelete: "cascade" }),
+  sortOrder: integer().default(0).notNull(),
+}, (t) => ({
+  pk: primaryKey({ columns: [t.formationId, t.relatedFormationId] }),
+}))
+
+export const avis = pgTable("avis", {
+  id: integer().primaryKey().generatedAlwaysAsIdentity(),
+  formationId: integer().notNull().references(() => formations.id, { onDelete: "cascade" }),
+  name: text().notNull(),
+  rating: integer().notNull(),
+  comment: text(),
+  isActive: boolean().default(true).notNull(),
+  createdAt: timestamp({ withTimezone: true }).default(sql`now()`).notNull(),
+})
+
 export const certifications = pgTable("certifications", {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
   pageSlug: text().notNull().default(""),
@@ -75,20 +116,6 @@ export const certifications = pgTable("certifications", {
   audience: text(),
   href: text().default("#"),
   groupKey: text(),
-  isActive: boolean().default(true).notNull(),
-  sortOrder: integer().default(0).notNull(),
-  createdAt: timestamp({ withTimezone: true }).default(sql`now()`).notNull(),
-  updatedAt: timestamp({ withTimezone: true }).default(sql`now()`).notNull(),
-})
-
-export const courses = pgTable("courses", {
-  id: integer().primaryKey().generatedAlwaysAsIdentity(),
-  formationId: integer().notNull().references(() => formations.id, { onDelete: "cascade" }),
-  title: text().notNull(),
-  slug: text().notNull().unique(),
-  summary: text(),
-  duration: text(),
-  modality: text(),
   isActive: boolean().default(true).notNull(),
   sortOrder: integer().default(0).notNull(),
   createdAt: timestamp({ withTimezone: true }).default(sql`now()`).notNull(),
@@ -109,7 +136,6 @@ export const faqs = pgTable("faqs", {
   domainId: integer().references(() => domains.id, { onDelete: "cascade" }),
   subCategoryId: integer().references(() => subCategories.id, { onDelete: "cascade" }),
   formationId: integer().references(() => formations.id, { onDelete: "cascade" }),
-  courseId: integer().references(() => courses.id, { onDelete: "cascade" }),
   certificationId: integer().references(() => certifications.id, { onDelete: "cascade" }),
   isActive: boolean().default(true).notNull(),
   sortOrder: integer().default(0).notNull(),
@@ -126,7 +152,6 @@ export const pdfResources = pgTable("pdf_resources", {
   domainId: integer().references(() => domains.id, { onDelete: "cascade" }),
   subCategoryId: integer().references(() => subCategories.id, { onDelete: "cascade" }),
   formationId: integer().references(() => formations.id, { onDelete: "cascade" }),
-  courseId: integer().references(() => courses.id, { onDelete: "cascade" }),
   certificationId: integer().references(() => certifications.id, { onDelete: "cascade" }),
   isActive: boolean().default(true).notNull(),
   sortOrder: integer().default(0).notNull(),
@@ -197,4 +222,18 @@ export const verifications = pgTable("verification", {
   expiresAt: timestamp("expires_at").notNull(),
   createdAt: timestamp("created_at"),
   updatedAt: timestamp("updated_at"),
+})
+
+export const catalogueRequests = pgTable("catalogue_requests", {
+  id: integer().primaryKey().generatedAlwaysAsIdentity(),
+  firstName: text().notNull(),
+  lastName: text().notNull(),
+  email: text().notNull(),
+  phone: text(),
+  company: text().notNull(),
+  role: text().notNull(),
+  roleOther: text(),
+  catalogueSlugs: text().array().default(sql`'{}'::text[]`).notNull(),
+  locale: text().default("fr").notNull(),
+  createdAt: timestamp({ withTimezone: true }).default(sql`now()`).notNull(),
 })

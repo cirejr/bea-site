@@ -10,7 +10,7 @@ const slugToKey: Record<string, string> = {
   parcours: "training_qa_parcours",
   "formations-certifiantes": "training_qa_certifiantes",
   "classes-virtuelles": "training_qa_classes_virtuelles",
-  "offre-lde": "training_qa_offre_lde",
+  "offre-bea": "training_qa_offre_lde",
   recherche: "training_qa_recherche",
 }
 

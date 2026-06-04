@@ -183,10 +183,11 @@ const pourquoiSections = [
 ]
 
 const stats = [
-  { value: "+1 500", label: "Formations proposées" },
+  { value: "+1 500", label: "Formations au catalogue" },
   { value: "+100", label: "Parcours de formation" },
-  { value: "+2 000", label: "Intervenants" },
-  { value: "4,7/5", label: "Note moyenne clients" },
+  { value: "+120", label: "Formations d'actualité" },
+  { value: "+2 000", label: "Intervenants experts" },
+  { value: "4,7/5", label: "Note client moyenne" },
 ]
 
 const valeurAjoutee = [
@@ -422,7 +423,7 @@ export function TrainingQsePage() {
 
         <section className="mb-14">
           <SectionHeader title="Nos chiffres clés" />
-          <TrustStats stats={stats} columns={4} />
+          <TrustStats stats={stats} columns={5} />
         </section>
 
         <section>

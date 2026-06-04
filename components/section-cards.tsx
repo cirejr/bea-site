@@ -11,7 +11,7 @@ import {
 import { HugeiconsIcon } from "@hugeicons/react"
 import { CourseIcon, GlobeIcon, Certificate01Icon, UserGroupIcon } from "@hugeicons/core-free-icons"
 
-export function SectionCards({ stats }: { stats: { formationCount: number; courseCount: number; domainCount: number; testimonialCount: number; certCount: number } }) {
+export function SectionCards({ stats }: { stats: { formationCount: number; domainCount: number; testimonialCount: number; certCount: number } }) {
   const items = [
     {
       title: stats.formationCount.toString(),

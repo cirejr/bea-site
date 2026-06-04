@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation"
 import { setRequestLocale } from "next-intl/server"
 
-import { routing } from "@/lib/routing"
+import { routing } from "@/i18n/routing"
 
 export default async function ServicesPage({
   params,

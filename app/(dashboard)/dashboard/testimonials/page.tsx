@@ -1,5 +1,6 @@
 import { getTestimonials } from "@/lib/data"
 import { deleteTestimonial } from "@/lib/actions"
+import { DeleteConfirmDialog } from "@/components/delete-confirm-dialog"
 import { Button } from "@/components/ui/button"
 import { HugeiconsIcon } from "@hugeicons/react"
 import { Delete01Icon } from "@hugeicons/core-free-icons"
@@ -26,11 +27,11 @@ export default async function TestimonialsPage() {
               </div>
               <div className="flex items-center gap-2">
                 <span className="text-amber-500">{'★'.repeat(t.rating ?? 5)}</span>
-                <form action={deleteTestimonial.bind(null, t.id)}>
+                <DeleteConfirmDialog action={deleteTestimonial.bind(null, t.id)} entityLabel="ce témoignage">
                   <Button variant="ghost" size="icon" className="size-8 text-destructive">
                     <HugeiconsIcon icon={Delete01Icon} strokeWidth={2} className="size-4" />
                   </Button>
-                </form>
+                </DeleteConfirmDialog>
               </div>
             </div>
             <p className="text-sm text-muted-foreground">&ldquo;{t.quote}&rdquo;</p>

@@ -17,7 +17,7 @@ export default async function FormationsPage() {
     priceDisplay: f.priceVisible
       ? f.salePrice || f.price || "-"
       : "Masqué",
-    badge: f.badge,
+    badges: (f.badges ?? []).map((b) => ({ id: b.id, name: b.name, color: b.color })),
     isActive: f.isActive,
   }))
 

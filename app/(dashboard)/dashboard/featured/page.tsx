@@ -1,5 +1,6 @@
 import { getFeaturedFormations } from "@/lib/data"
 import { removeFeaturedFormation } from "@/lib/actions"
+import { DeleteConfirmDialog } from "@/components/delete-confirm-dialog"
 import { Button } from "@/components/ui/button"
 import { HugeiconsIcon } from "@hugeicons/react"
 import { Delete01Icon, StarIcon } from "@hugeicons/core-free-icons"
@@ -28,11 +29,11 @@ export default async function FeaturedPage() {
                 </p>
               </div>
             </div>
-            <form action={removeFeaturedFormation.bind(null, f.id)}>
+            <DeleteConfirmDialog action={removeFeaturedFormation.bind(null, f.id)} entityLabel="cette formation à la une">
               <Button variant="ghost" size="icon" className="size-8 text-destructive">
                 <HugeiconsIcon icon={Delete01Icon} strokeWidth={2} className="size-4" />
               </Button>
-            </form>
+            </DeleteConfirmDialog>
           </div>
         ))}
         {featured.length === 0 && (

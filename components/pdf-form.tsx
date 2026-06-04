@@ -19,7 +19,6 @@ interface PdfFormProps {
   domains: { id: number; label: string }[]
   subCategories: { id: number; label: string }[]
   formations: { id: number; title: string }[]
-  courses: { id: number; title: string }[]
   certifications: { id: number; title: string }[]
 }
 
@@ -27,7 +26,6 @@ export function PdfForm({
   domains,
   subCategories,
   formations,
-  courses,
   certifications,
 }: PdfFormProps) {
   const [state, formAction, pending] = useActionState<{ error: string | null }, FormData>(
@@ -46,7 +44,6 @@ export function PdfForm({
           domainId: optionalNumber(formData.get("domainId")),
           subCategoryId: optionalNumber(formData.get("subCategoryId")),
           formationId: optionalNumber(formData.get("formationId")),
-          courseId: optionalNumber(formData.get("courseId")),
           certificationId: optionalNumber(formData.get("certificationId")),
           sortOrder: Number(formData.get("sortOrder")) || 0,
           isActive: formData.get("isActive") === "on",
@@ -82,7 +79,17 @@ export function PdfForm({
         <Textarea id="description" name="description" rows={2} />
       </div>
 
-      <Select name="resourceType" defaultValue="other">
+      <Select
+        name="resourceType"
+        items={{
+          other: "Autre",
+          brochure: "Brochure",
+          program: "Programme",
+          guide: "Guide",
+          certificate: "Certificat",
+        }}
+        defaultValue="other"
+      >
         <SelectTrigger><SelectValue placeholder="Type" /></SelectTrigger>
         <SelectContent>
           <SelectItem value="other">Autre</SelectItem>
@@ -95,7 +102,12 @@ export function PdfForm({
 
       <Input name="sortOrder" type="number" placeholder="Ordre" defaultValue="0" />
 
-      <Select name="domainId">
+      <Select
+        name="domainId"
+        items={Object.fromEntries(
+          domains.map((item) => [item.id.toString(), item.label])
+        )}
+      >
         <SelectTrigger><SelectValue placeholder="Domaine" /></SelectTrigger>
         <SelectContent>
           {domains.map((item) => (
@@ -104,7 +116,12 @@ export function PdfForm({
         </SelectContent>
       </Select>
 
-      <Select name="subCategoryId">
+      <Select
+        name="subCategoryId"
+        items={Object.fromEntries(
+          subCategories.map((item) => [item.id.toString(), item.label])
+        )}
+      >
         <SelectTrigger><SelectValue placeholder="Sous-catégorie" /></SelectTrigger>
         <SelectContent>
           {subCategories.map((item) => (
@@ -113,7 +130,12 @@ export function PdfForm({
         </SelectContent>
       </Select>
 
-      <Select name="formationId">
+      <Select
+        name="formationId"
+        items={Object.fromEntries(
+          formations.map((item) => [item.id.toString(), item.title])
+        )}
+      >
         <SelectTrigger><SelectValue placeholder="Formation" /></SelectTrigger>
         <SelectContent>
           {formations.map((item) => (
@@ -122,16 +144,12 @@ export function PdfForm({
         </SelectContent>
       </Select>
 
-      <Select name="courseId">
-        <SelectTrigger><SelectValue placeholder="Cours" /></SelectTrigger>
-        <SelectContent>
-          {courses.map((item) => (
-            <SelectItem key={item.id} value={item.id.toString()}>{item.title}</SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-
-      <Select name="certificationId">
+      <Select
+        name="certificationId"
+        items={Object.fromEntries(
+          certifications.map((item) => [item.id.toString(), item.title])
+        )}
+      >
         <SelectTrigger><SelectValue placeholder="Certification" /></SelectTrigger>
         <SelectContent>
           {certifications.map((item) => (

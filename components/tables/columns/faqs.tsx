@@ -1,5 +1,6 @@
 "use client"
 
+import { DeleteConfirmDialog } from "@/components/delete-confirm-dialog"
 import { createColumnHelper } from "@tanstack/react-table"
 import { deleteFaq } from "@/lib/actions"
 import { Button } from "@/components/ui/button"
@@ -32,9 +33,9 @@ export const faqsColumns = [
     header: "Actions",
     cell: ({ row }) => (
       <div className="flex justify-end">
-        <form action={deleteFaq.bind(null, row.original.id)}>
+        <DeleteConfirmDialog action={deleteFaq.bind(null, row.original.id)} entityLabel="cette FAQ">
           <Button variant="ghost" className="text-destructive">Supprimer</Button>
-        </form>
+        </DeleteConfirmDialog>
       </div>
     ),
   }),

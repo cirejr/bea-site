@@ -27,7 +27,10 @@ import {
   Settings05Icon,
   HelpCircleIcon,
   CommandIcon,
+  Tag01Icon,
+  MailIcon,
 } from "@hugeicons/core-free-icons"
+import Link from "next/link"
 
 const navMain = [
   {
@@ -41,11 +44,6 @@ const navMain = [
     icon: <HugeiconsIcon icon={GraduationCap} strokeWidth={2} />,
   },
   {
-    title: "Cours",
-    url: "/dashboard/courses",
-    icon: <HugeiconsIcon icon={GraduationCap} strokeWidth={2} />,
-  },
-  {
     title: "Domaines",
     url: "/dashboard/domains",
     icon: <HugeiconsIcon icon={GlobeIcon} strokeWidth={2} />,
@@ -56,6 +54,16 @@ const navMain = [
     icon: <HugeiconsIcon icon={Certificate01Icon} strokeWidth={2} />,
   },
   {
+    title: "Badges",
+    url: "/dashboard/badges",
+    icon: <HugeiconsIcon icon={Tag01Icon} strokeWidth={2} />,
+  },
+  {
+    title: "Demandes de catalogues",
+    url: "/dashboard/catalogue-requests",
+    icon: <HugeiconsIcon icon={MailIcon} strokeWidth={2} />,
+  },
+  /*  {
     title: "Témoignages",
     url: "/dashboard/testimonials",
     icon: <HugeiconsIcon icon={UserGroupIcon} strokeWidth={2} />,
@@ -74,7 +82,7 @@ const navMain = [
     title: "À la une",
     url: "/dashboard/featured",
     icon: <HugeiconsIcon icon={StarIcon} strokeWidth={2} />,
-  },
+  }, */
 ]
 
 const navSecondary = [
@@ -92,9 +100,11 @@ const navSecondary = [
 
 export function AppSidebar({
   user,
+  badges,
   ...props
 }: React.ComponentProps<typeof Sidebar> & {
   user: { name: string; email: string; image?: string | null; avatar?: string }
+  badges: { id: number; name: string; slug: string; color: string }[]
 }) {
   return (
     <Sidebar collapsible="offcanvas" {...props}>
@@ -103,20 +113,26 @@ export function AppSidebar({
           <SidebarMenuItem>
             <SidebarMenuButton
               className="data-[slot=sidebar-menu-button]:p-1.5!"
-              render={<a href="/dashboard" />}
+              render={<Link href="/dashboard" />}
             >
-              <HugeiconsIcon icon={CommandIcon} strokeWidth={2} className="size-5!" />
+              <HugeiconsIcon
+                icon={CommandIcon}
+                strokeWidth={2}
+                className="size-5!"
+              />
               <span className="text-base font-semibold">BEA Admin</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={navMain} />
-        <NavSecondary items={navSecondary} className="mt-auto" />
+        <NavMain items={navMain} badges={badges} />
+        {/* <NavSecondary items={navSecondary} className="mt-auto" /> */}
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={{ ...user, avatar: user.avatar ?? "/avatars/default.jpg" }} />
+        <NavUser
+          user={{ ...user, avatar: user.avatar ?? "/avatars/default.svg" }}
+        />
       </SidebarFooter>
     </Sidebar>
   )

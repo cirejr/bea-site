@@ -19,7 +19,6 @@ interface FaqFormProps {
   domains: { id: number; label: string }[]
   subCategories: { id: number; label: string }[]
   formations: { id: number; title: string }[]
-  courses: { id: number; title: string }[]
   certifications: { id: number; title: string }[]
 }
 
@@ -27,7 +26,6 @@ export function FaqForm({
   domains,
   subCategories,
   formations,
-  courses,
   certifications,
 }: FaqFormProps) {
   const [state, formAction, pending] = useActionState<{ error: string | null }, FormData>(
@@ -44,7 +42,6 @@ export function FaqForm({
           domainId: optionalNumber(formData.get("domainId")),
           subCategoryId: optionalNumber(formData.get("subCategoryId")),
           formationId: optionalNumber(formData.get("formationId")),
-          courseId: optionalNumber(formData.get("courseId")),
           certificationId: optionalNumber(formData.get("certificationId")),
           sortOrder: Number(formData.get("sortOrder")) || 0,
           isActive: formData.get("isActive") === "on",
@@ -75,7 +72,12 @@ export function FaqForm({
         <Textarea id="answer" name="answer" required rows={3} />
       </div>
 
-      <Select name="domainId">
+      <Select
+        name="domainId"
+        items={Object.fromEntries(
+          domains.map((item) => [item.id.toString(), item.label])
+        )}
+      >
         <SelectTrigger><SelectValue placeholder="Domaine" /></SelectTrigger>
         <SelectContent>
           {domains.map((item) => (
@@ -84,7 +86,12 @@ export function FaqForm({
         </SelectContent>
       </Select>
 
-      <Select name="subCategoryId">
+      <Select
+        name="subCategoryId"
+        items={Object.fromEntries(
+          subCategories.map((item) => [item.id.toString(), item.label])
+        )}
+      >
         <SelectTrigger><SelectValue placeholder="Sous-catégorie" /></SelectTrigger>
         <SelectContent>
           {subCategories.map((item) => (
@@ -93,7 +100,12 @@ export function FaqForm({
         </SelectContent>
       </Select>
 
-      <Select name="formationId">
+      <Select
+        name="formationId"
+        items={Object.fromEntries(
+          formations.map((item) => [item.id.toString(), item.title])
+        )}
+      >
         <SelectTrigger><SelectValue placeholder="Formation" /></SelectTrigger>
         <SelectContent>
           {formations.map((item) => (
@@ -102,16 +114,12 @@ export function FaqForm({
         </SelectContent>
       </Select>
 
-      <Select name="courseId">
-        <SelectTrigger><SelectValue placeholder="Cours" /></SelectTrigger>
-        <SelectContent>
-          {courses.map((item) => (
-            <SelectItem key={item.id} value={item.id.toString()}>{item.title}</SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-
-      <Select name="certificationId">
+      <Select
+        name="certificationId"
+        items={Object.fromEntries(
+          certifications.map((item) => [item.id.toString(), item.title])
+        )}
+      >
         <SelectTrigger><SelectValue placeholder="Certification" /></SelectTrigger>
         <SelectContent>
           {certifications.map((item) => (

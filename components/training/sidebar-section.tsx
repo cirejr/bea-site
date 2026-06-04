@@ -8,11 +8,11 @@ export type BeaTrainingSidebarSectionProps = {
 }
 
 const navItems = [
-  { id: "overview", icon: "dashboard", label: "Overview", href: "/training", category: null },
-  { id: "finance", icon: "payments", label: "Finance", href: "/training?category=finance", category: "finance" },
-  { id: "hr", icon: "groups", label: "Human Resources", href: "/training?category=hr", category: "hr" },
-  { id: "ngo", icon: "account_balance", label: "NGO Management", href: "/training?category=ngo", category: "ngo" },
-  { id: "entrepreneurship", icon: "rocket_launch", label: "Entrepreneurship", href: "/training?category=entrepreneurship", category: "entrepreneurship" },
+  { id: "overview", icon: "dashboard", label: "Overview", href: "/formations", category: null },
+  { id: "finance", icon: "payments", label: "Finance", href: "/formations?category=finance", category: "finance" },
+  { id: "hr", icon: "groups", label: "Human Resources", href: "/formations?category=hr", category: "hr" },
+  { id: "ngo", icon: "account_balance", label: "NGO Management", href: "/formations?category=ngo", category: "ngo" },
+  { id: "entrepreneurship", icon: "rocket_launch", label: "Entrepreneurship", href: "/formations?category=entrepreneurship", category: "entrepreneurship" },
 ]
 
 export function BeaTrainingSidebarSection({ activeCategory }: BeaTrainingSidebarSectionProps) {

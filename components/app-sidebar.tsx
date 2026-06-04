@@ -29,6 +29,7 @@ import {
   CommandIcon,
   Tag01Icon,
   MailIcon,
+  LayoutGridIcon,
 } from "@hugeicons/core-free-icons"
 import Link from "next/link"
 
@@ -57,6 +58,11 @@ const navMain = [
     title: "Badges",
     url: "/dashboard/badges",
     icon: <HugeiconsIcon icon={Tag01Icon} strokeWidth={2} />,
+  },
+  {
+    title: "Modalités",
+    url: "/dashboard/modalities",
+    icon: <HugeiconsIcon icon={LayoutGridIcon} strokeWidth={2} />,
   },
   {
     title: "Demandes de catalogues",
@@ -101,10 +107,21 @@ const navSecondary = [
 export function AppSidebar({
   user,
   badges,
+  unreadNotificationsCount = 0,
+  unreadNotifications = [],
   ...props
 }: React.ComponentProps<typeof Sidebar> & {
   user: { name: string; email: string; image?: string | null; avatar?: string }
   badges: { id: number; name: string; slug: string; color: string }[]
+  unreadNotificationsCount?: number
+  unreadNotifications?: Array<{
+    id: number
+    type: string
+    title: string
+    description: string
+    time: string
+    unread: boolean
+  }>
 }) {
   return (
     <Sidebar collapsible="offcanvas" {...props}>
@@ -126,7 +143,12 @@ export function AppSidebar({
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={navMain} badges={badges} />
+        <NavMain
+          items={navMain}
+          badges={badges}
+          unreadNotificationsCount={unreadNotificationsCount}
+          unreadNotifications={unreadNotifications}
+        />
         {/* <NavSecondary items={navSecondary} className="mt-auto" /> */}
       </SidebarContent>
       <SidebarFooter>

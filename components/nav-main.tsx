@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useActionState, useState } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import {
@@ -28,45 +28,12 @@ import {
   Tag01Icon,
   UserCircle02Icon,
   Notification03Icon,
+  CheckCircle,
 } from "@hugeicons/core-free-icons"
-
-const initialNotifications = [
-  {
-    id: 1,
-    type: "user",
-    title: "Nouvelle inscription",
-    description:
-      "Marie Dupont s'est inscrite à la formation Développement Web.",
-    time: "Il y a 10 min",
-    unread: true,
-  },
-  {
-    id: 2,
-    type: "check",
-    title: "Formation publiée",
-    description:
-      "La formation 'React Avancé' a été approuvée et est en ligne.",
-    time: "Il y a 1h",
-    unread: true,
-  },
-  {
-    id: 3,
-    type: "certificate",
-    title: "Certificat délivré",
-    description:
-      "Le certificat de Jean Martin pour 'Node.js' a été émis.",
-    time: "Il y a 3h",
-    unread: false,
-  },
-  {
-    id: 4,
-    type: "message",
-    title: "Nouveau témoignage",
-    description: "Sophie Lefebvre a laissé un avis 5 étoiles.",
-    time: "Il y a 1 jour",
-    unread: false,
-  },
-]
+import {
+  markAllCatalogueRequestsRead,
+  markCatalogueRequestRead,
+} from "@/lib/actions"
 
 const typeIcons: Record<string, typeof UserCircle02Icon> = {
   user: UserCircle02Icon,
@@ -75,9 +42,20 @@ const typeIcons: Record<string, typeof UserCircle02Icon> = {
   message: Mail01Icon,
 }
 
+interface NotificationItem {
+  id: number
+  type: string
+  title: string
+  description: string
+  time: string
+  unread: boolean
+}
+
 export function NavMain({
   items,
   badges,
+  unreadNotificationsCount = 0,
+  unreadNotifications = [],
 }: {
   items: {
     title: string
@@ -85,13 +63,24 @@ export function NavMain({
     icon?: React.ReactNode
   }[]
   badges: { id: number; name: string; slug: string; color: string }[]
+  unreadNotificationsCount?: number
+  unreadNotifications?: NotificationItem[]
 }) {
   const router = useRouter()
-  const [notifications, setNotifications] = useState(initialNotifications)
-  const unreadCount = notifications.filter((n) => n.unread).length
+  const [notifications, setNotifications] =
+    useState<NotificationItem[]>(unreadNotifications)
+  const unreadCount = unreadNotificationsCount
 
-  const markAllRead = () => {
+  const handleMarkAllRead = async () => {
     setNotifications((prev) => prev.map((n) => ({ ...n, unread: false })))
+    await markAllCatalogueRequestsRead()
+  }
+
+  const handleMarkRead = async (id: number) => {
+    setNotifications((prev) =>
+      prev.map((n) => (n.id === id ? { ...n, unread: false } : n))
+    )
+    await markCatalogueRequestRead(id)
   }
 
   return (
@@ -106,10 +95,7 @@ export function NavMain({
                     tooltip="Quick Create"
                     className="min-w-8 bg-primary text-primary-foreground duration-200 ease-linear hover:bg-primary/90 hover:text-primary-foreground active:bg-primary/90 active:text-primary-foreground"
                   >
-                    <HugeiconsIcon
-                      icon={PlusSignCircleIcon}
-                      strokeWidth={2}
-                    />
+                    <HugeiconsIcon icon={PlusSignCircleIcon} strokeWidth={2} />
                     <span>Quick Create</span>
                   </SidebarMenuButton>
                 }
@@ -119,10 +105,7 @@ export function NavMain({
                   <DropdownMenuItem
                     onClick={() => router.push("/dashboard/formations")}
                   >
-                    <HugeiconsIcon
-                      icon={GraduationCap}
-                      strokeWidth={2}
-                    />
+                    <HugeiconsIcon icon={GraduationCap} strokeWidth={2} />
                     Nouvelle formation
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
@@ -135,10 +118,7 @@ export function NavMain({
                   <DropdownMenuItem
                     onClick={() => router.push("/dashboard/certifications")}
                   >
-                    <HugeiconsIcon
-                      icon={Certificate01Icon}
-                      strokeWidth={2}
-                    />
+                    <HugeiconsIcon icon={Certificate01Icon} strokeWidth={2} />
                     Nouveau certificat
                   </DropdownMenuItem>
                 </DropdownMenuGroup>
@@ -148,7 +128,9 @@ export function NavMain({
                 </div>
                 <DropdownMenuGroup>
                   <DropdownMenuItem
-                    onClick={() => router.push(`/fr/formations/certifications-amf`)}
+                    onClick={() =>
+                      router.push(`/fr/formations/certifications-amf`)
+                    }
                   >
                     <HugeiconsIcon icon={Certificate01Icon} strokeWidth={2} />
                     Certifications AMF
@@ -156,10 +138,12 @@ export function NavMain({
                   {badges.map((badge) => (
                     <DropdownMenuItem
                       key={badge.id}
-                      onClick={() => router.push(`/fr/formations/${badge.slug}`)}
+                      onClick={() =>
+                        router.push(`/fr/formations/${badge.slug}`)
+                      }
                     >
                       <span
-                        className="mr-2 size-2 rounded-full shrink-0"
+                        className="mr-2 size-2 shrink-0 rounded-full"
                         style={{ backgroundColor: badge.color }}
                       />
                       {badge.name}
@@ -179,7 +163,7 @@ export function NavMain({
                   >
                     <HugeiconsIcon icon={Mail01Icon} strokeWidth={2} />
                     {unreadCount > 0 && (
-                      <span className="absolute -top-1 -right-1 flex size-4 min-w-4 items-center justify-center rounded-full bg-destructive px-0.5 text-[10px] font-medium leading-none text-destructive-foreground">
+                      <span className="text-destructive-foreground absolute -top-1 -right-1 flex size-4 min-w-4 items-center justify-center rounded-full bg-destructive px-0.5 text-[10px] leading-none font-medium">
                         {unreadCount}
                       </span>
                     )}
@@ -190,12 +174,10 @@ export function NavMain({
               <DropdownMenuContent align="end" className="w-80">
                 <DropdownMenuGroup>
                   <div className="flex items-center justify-between px-2 py-1.5">
-                    <span className="text-sm font-medium">
-                      Notifications
-                    </span>
+                    <span className="text-sm font-medium">Notifications</span>
                     {unreadCount > 0 && (
                       <button
-                        onClick={markAllRead}
+                        onClick={handleMarkAllRead}
                         className="text-xs text-muted-foreground hover:text-foreground"
                       >
                         Tout marquer lu
@@ -210,6 +192,7 @@ export function NavMain({
                         <DropdownMenuItem
                           key={n.id}
                           className="flex items-start gap-3 py-2"
+                          onClick={() => n.unread && handleMarkRead(n.id)}
                         >
                           <HugeiconsIcon
                             icon={Icon}

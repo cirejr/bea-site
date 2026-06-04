@@ -1,10 +1,10 @@
-import { Inter } from "next/font/google"
 import localFont from "next/font/local"
 
-export const inter = Inter({
+export const inter = localFont({
+  src: "./fonts/inter/InterVariable.woff2",
   variable: "--font-inter",
-  subsets: ["latin"],
   display: "swap",
+  weight: "100 900",
 })
 
 export const stackSans = localFont({

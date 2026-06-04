@@ -22,6 +22,13 @@
       "when": 1780000000000,
       "tag": "0005_catalogue_requests",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1780592000000,
+      "tag": "0006_add_read_fields_to_catalogue_requests",
+      "breakpoints": true
     }
   ]
 }

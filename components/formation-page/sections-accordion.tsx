@@ -21,7 +21,7 @@ import LinkNext from "next/link"
 import { TipTapContent } from "@/components/formation-page/tiptap-content"
 
 type SectionsAccordionProps = {
-  description: string
+  description?: string | null
   objectifs: string[]
   programmes: string | null
   pourQui: string | null

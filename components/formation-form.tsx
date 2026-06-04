@@ -376,7 +376,7 @@ export function FormationForm({
           <Input
             id="currency"
             name="currency"
-            defaultValue={initialData?.currency ?? "EUR"}
+            defaultValue={initialData?.currency ?? "FCFA"}
           />
         </div>
         <div className="space-y-2">

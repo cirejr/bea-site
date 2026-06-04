@@ -83,10 +83,7 @@ export async function getDomainsWithSubCategories(options?: {
     .from(domains)
     .leftJoin(subCategories, eq(subCategories.domainId, domains.id))
     .where(conditions.length ? and(...conditions) : undefined)
-    .orderBy(
-      asc(domains.id),
-      asc(subCategories.id)
-    )
+    .orderBy(asc(domains.id), asc(subCategories.id))
 
   const map = new Map<number, Domain & { subCategories: SubCategory[] }>()
   for (const row of rows) {
@@ -327,7 +324,9 @@ export async function getFormationsByCertificationPageSlug(pageSlug: string) {
   const rows = await db
     .select()
     .from(formations)
-    .where(and(eq(formations.isActive, true), inArray(formations.id, formationIds)))
+    .where(
+      and(eq(formations.isActive, true), inArray(formations.id, formationIds))
+    )
     .orderBy(asc(formations.sortOrder), asc(formations.id))
   if (rows.length === 0) return []
   return attachFormationRelations(rows)
@@ -375,8 +374,12 @@ export async function getRelatedFormationIds(formationId: number) {
 export async function getRelatedFormations(formation: Formation, limit = 3) {
   const manualIds = await getRelatedFormationIds(formation.id)
   if (manualIds.length > 0) {
-    const formations = await Promise.all(manualIds.map((id) => getFormation(id)))
-    return formations.filter((f): f is FormationWithRelations => f !== null).slice(0, limit)
+    const formations = await Promise.all(
+      manualIds.map((id) => getFormation(id))
+    )
+    return formations
+      .filter((f): f is FormationWithRelations => f !== null)
+      .slice(0, limit)
   }
   const rows = await getFormations({ domainSlug: undefined })
   return rows
@@ -601,19 +604,55 @@ export async function getCatalogueRequests() {
     .orderBy(desc(catalogueRequests.createdAt))
 }
 
+export async function getUnreadCatalogueRequestsCount() {
+  return db.$count(catalogueRequests, eq(catalogueRequests.isRead, false))
+}
+
+export async function getUnreadCatalogueRequests(limit = 10) {
+  const rows = await db
+    .select()
+    .from(catalogueRequests)
+    .where(eq(catalogueRequests.isRead, false))
+    .orderBy(desc(catalogueRequests.createdAt))
+    .limit(limit)
+
+  return rows.map((r) => ({
+    id: r.id,
+    type: "user",
+    title: `Nouvelle demande: ${r.firstName} ${r.lastName}`,
+    description: `${r.company} — ${r.catalogueSlugs.join(", ") || "Catalogue non spécifié"}`,
+    time: formatRelativeTime(r.createdAt),
+    unread: true,
+  }))
+}
+
+function formatRelativeTime(date: Date | string): string {
+  const d = date instanceof Date ? date : new Date(date)
+  const now = new Date()
+  const diffMs = now.getTime() - d.getTime()
+  const diffMins = Math.floor(diffMs / 60000)
+  const diffHours = Math.floor(diffMs / 3600000)
+  const diffDays = Math.floor(diffMs / 86400000)
+
+  if (diffMins < 1) return "À l'instant"
+  if (diffMins < 60) return `Il y a ${diffMins} min`
+  if (diffHours < 24) return `Il y a ${diffHours}h`
+  if (diffDays < 7) return `Il y a ${diffDays}j`
+  return new Intl.DateTimeFormat("fr-FR", {
+    day: "2-digit",
+    month: "2-digit",
+  }).format(d)
+}
+
 // Dashboard stats
 export async function getDashboardStats() {
-  const [
-    formationCount,
-    domainCount,
-    testimonialCount,
-    certCount,
-  ] = await Promise.all([
-    db.$count(formations, eq(formations.isActive, true)),
-    db.$count(domains),
-    db.$count(testimonials, eq(testimonials.isActive, true)),
-    db.$count(certifications),
-  ])
+  const [formationCount, domainCount, testimonialCount, certCount] =
+    await Promise.all([
+      db.$count(formations, eq(formations.isActive, true)),
+      db.$count(domains),
+      db.$count(testimonials, eq(testimonials.isActive, true)),
+      db.$count(certifications),
+    ])
   return {
     formationCount,
     domainCount,

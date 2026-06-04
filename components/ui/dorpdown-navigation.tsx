@@ -75,14 +75,14 @@ export function DropdownNavigation({ navItems, className = "" }: Props) {
                       layoutId="menu"
                     >
                       <div
-                        className="flex flex-wrap gap-x-9 gap-y-6"
-                        style={{ maxWidth: "880px" }}
+                        className="flex flex-wrap justify-between gap-x-9 gap-y-6"
+                        style={{ maxWidth: "1080px" }}
                       >
                         {navItem.subMenus.map((sub) => (
                           <motion.div
                             layout
                             key={sub.title}
-                            className={`${sub.isFocused && "rounded-sm bg-bea-surface-dim"} w-48 p-2`}
+                            className={`${sub.isFocused && "rounded-sm bg-bea-surface-dim"} w-52 p-2`}
                           >
                             <Link
                               href={sub.href || "#"}
@@ -98,7 +98,7 @@ export function DropdownNavigation({ navItems, className = "" }: Props) {
                                     className={`${sub.isFocused && "text-bea-outline hover:bg-bea-inverse-primary"} group flex items-start space-x-3 rounded-lg p-1.5 text-bea-on-surface-variant transition-colors duration-200 hover:bg-bea-primary hover:text-white`}
                                   >
                                     {item.icon && (
-                                      <div                                       className="flex size-8 shrink-0 items-center justify-center rounded-md border border-bea-outline-variant transition-colors duration-300 group-hover:bg-bea-primary/10 group-hover:text-bea-primary">
+                                      <div className="flex size-8 shrink-0 items-center justify-center rounded-md border border-bea-outline-variant transition-colors duration-300 group-hover:bg-bea-primary/10 group-hover:text-bea-primary">
                                         <item.icon className="h-4 w-4 flex-none" />
                                       </div>
                                     )}
